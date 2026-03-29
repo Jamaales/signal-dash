@@ -23,7 +23,7 @@ Return ONLY a raw JSON object, no markdown, no backticks, no explanation:
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'llama3-70b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.1,
         max_tokens: 1024
@@ -41,7 +41,6 @@ Return ONLY a raw JSON object, no markdown, no backticks, no explanation:
 
     const parsed = JSON.parse(clean.slice(start, end + 1));
     return res.status(200).json(parsed);
-
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
