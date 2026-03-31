@@ -149,7 +149,42 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .trade-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:8px;}
 .filt-row{display:flex;gap:5px;flex-wrap:wrap;}
 .filt-btn{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
-.filt-btn.active{background:var(--surface2);color:var(--text);border-color:var(--purple);}</style>
+.filt-btn.active{background:var(--surface2);color:var(--text);border-color:var(--purple);}
+@media(max-width:600px){
+  .topbar{padding:10px 14px;gap:8px;}
+  .logo{font-size:12px;}
+  .tab{font-size:11px;padding:4px 10px;}
+  .topbar-right{display:none;}
+  .content{padding:12px 14px;}
+  .metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:12px;}
+  .metric{padding:10px 10px;}
+  .metric-value{font-size:18px;}
+  .metric-label{font-size:9px;}
+  .jmetrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .trump-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .detail-actions{gap:4px;}
+  .detail-actions .btn{font-size:11px;padding:5px 8px;}
+  .ticker-row{padding:10px 10px;gap:7px;}
+  .t-symbol{min-width:44px;font-size:12px;}
+  .sig{width:22px;height:22px;font-size:8px;}
+  .score{font-size:9px;padding:2px 6px;}
+  .fg2{grid-template-columns:1fr 1fr;}
+  .fg3{grid-template-columns:1fr 1fr;}
+  .tgrid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .section-head{flex-direction:column;align-items:flex-start;gap:8px;}
+  .filt-row{margin-top:4px;}
+  .legend{display:none;}
+  .add-row input{font-size:12px;}
+  .scan-btn{font-size:12px;padding:8px 16px;}
+  .trade-top{gap:6px;}
+  .stog{font-size:11px;padding:5px 10px;}
+  .sig-toggles{gap:5px;}
+  .sig-checks{gap:8px;}
+  .form-footer{gap:6px;}
+  .trump-card{padding:11px 12px;}
+  .trade-card{padding:10px 12px;}
+}</style>
 </head>
 <body>
 <div class="app">
