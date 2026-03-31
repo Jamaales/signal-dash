@@ -1,9 +1,9 @@
-export const config = {
+ export const config = {
   api: {
     bodyParser: {
       sizeLimit: '10mb',
     },
-    responseLimit: '10mb',
+    responseLimit: false,
   },
 };
 
@@ -24,10 +24,8 @@ export default async function handler(req, res) {
 
 User's watchlist: ${watchlist || 'none'}. Flag any watchlist tickers that could be affected.
 
-After searching, return ONLY a raw JSON array with 4-6 items, no markdown, no backticks, no explanation before or after the JSON:
-[{"title":"max 10 word headline","summary":"1-2 sentence summary of what happened","date":"actual date","impact":"high or medium or low or neutral","sectors":["sector1","sector2"],"tickers":["TICK1","TICK2"],"reasoning":"1 sentence why this matters to swing traders right now"}]
-
-Focus on announcements that cause unusual options activity or pre-announcement market moves. Prioritize tariff news, trade deals, Iran war updates, sector callouts, and Truth Social posts that moved markets.`;
+Return ONLY a raw JSON array with 4-6 items, no markdown, no backticks, no explanation:
+[{"title":"max 10 word headline","summary":"1-2 sentence summary","date":"actual date","impact":"high or medium or low or neutral","sectors":["sector1"],"tickers":["TICK1"],"reasoning":"1 sentence for swing traders"}]`;
 
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -37,10 +35,10 @@ Focus on announcements that cause unusual options activity or pre-announcement m
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'groq/compound',
+        model: 'groq/compound-mini',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.2,
-        max_tokens: 2048
+        max_tokens: 1024
       })
     });
 
@@ -51,7 +49,7 @@ Focus on announcements that cause unusual options activity or pre-announcement m
     const clean = text.replace(/```json|```/g, '').trim();
     const start = clean.indexOf('[');
     const end = clean.lastIndexOf(']');
-    if (start === -1 || end === -1) return res.status(500).json({ error: 'Could not parse response — try scanning again' });
+    if (start === -1 || end === -1) return res.status(500).json({ error: 'Could not parse response — try again' });
 
     const parsed = JSON.parse(clean.slice(start, end + 1));
     return res.status(200).json(parsed);
