@@ -9,7 +9,7 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --bg:#0d0b1a;--surface:#13102b;--surface2:#1a1640;--border:#2d2560;
-  --text:#e8e9eb;--muted:#9ca3af;--hint:#6b7280;;
+  --text:#e8e9eb;--muted:#9ca3af;--hint:#6b7280;
   --green:#4ade80;--green-bg:#0d2218;--green-border:#1a4a2e;
   --amber:#fbbf24;--amber-bg:#211a06;--amber-border:#4a3a0a;
   --red:#f87171;--red-bg:#220d0d;--red-border:#4a1a1a;
@@ -277,7 +277,7 @@ function openDetail(i){
   document.getElementById('d-rsi').textContent=t.rsi||'—';
   document.getElementById('d-target').textContent=t.target?'$'+t.target:'—';
   document.getElementById('d-notes').value=t.notes||'';
-  document.getElementById('btn-ct').onclick=()=>window.open('https://www.capitoltrades.com/instruments?search='+t.symbol,'_blank');
+  document.getElementById('btn-ct').onclick=()=>window.open('https://www.capitoltrades.com/issuers/'+t.symbol,'_blank');
   document.getElementById('btn-bc').onclick=()=>window.open('https://www.barchart.com/stocks/quotes/'+t.symbol+'/options','_blank');
   updateToggles();document.getElementById('detail').classList.add('active');render();
 }
