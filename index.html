@@ -535,7 +535,8 @@ function renderTrump(){
     const ic=item.impact==='high'?'imp-high':item.impact==='medium'?'imp-med':item.impact==='low'?'imp-low':'imp-neutral';
     const sectors=(item.sectors||[]).map(s=>`<span class="sector-tag">${s}</span>`).join('');
     const tags=(item.tickers||[]).map(t=>{const iw=ws.includes(t);return`<span class="ticker-tag${iw?' in-watch':''}" onclick="addFromTrump('${t}')">${t}${iw?' ✓':' +'}</span>`;}).join('');
-    return`<div class="trump-card"><div class="tc-top"><div><div class="tc-title">${item.title||''}</div><div class="tc-date">${item.date||''}</div></div><span class="imp ${ic}">${item.impact||'neutral'}</span></div><div class="tc-summary">${item.summary||''}</div><div class="tc-reason">${item.reasoning||''}</div><div class="tags">${sectors}${tags}</div></div>`;
+    const sources=(item.sources||[]).map(s=>`<a href="${s.url}" target="_blank" style="font-size:10px;color:var(--blue);text-decoration:none;padding:2px 8px;border:1px solid var(--blue-border);border-radius:20px;background:var(--blue-bg);">${s.label} ↗</a>`).join('');
+    return`<div class="trump-card"><div class="tc-top"><div><div class="tc-title">${item.title||''}</div><div class="tc-date">${item.date||''}</div></div><span class="imp ${ic}">${item.impact||'neutral'}</span></div><div class="tc-summary">${item.summary||''}</div><div class="tc-reason">${item.reasoning||''}</div><div class="tags">${sectors}${tags}</div>${sources?`<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;">${sources}</div>`:''}</div>`;
   }).join('');
 }
 async function addFromTrump(sym){
