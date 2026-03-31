@@ -24,10 +24,10 @@ export default async function handler(req, res) {
 
 User's watchlist: ${watchlist || 'none'}. Flag any watchlist tickers that could be affected.
 
-After searching, return ONLY a raw JSON array with 4-6 items, no markdown, no backticks, no explanation before or after the JSON:
-[{"title":"max 10 word headline","summary":"1-2 sentence summary of what happened","date":"actual date","impact":"high or medium or low or neutral","sectors":["sector1","sector2"],"tickers":["TICK1","TICK2"],"reasoning":"1 sentence why this matters to swing traders right now","sources":[{"label":"Source name","url":"https://full-url-here.com"}]}]
+Return ONLY a raw JSON array with 4-6 items, no markdown, no backticks, no explanation:
+[{"title":"max 10 word headline","summary":"1-2 sentence summary","date":"actual date","impact":"high or medium or low or neutral","sectors":["sector1"],"tickers":["TICK1"],"reasoning":"1 sentence for swing traders","sources":[{"label":"Source name","url":"https://url.com"}]}]
 
-Include 1-2 real source URLs per item from the search results. Focus on announcements that cause unusual options activity or pre-announcement market moves.`;
+Include 1-2 real source URLs per item from your search results.`;
 
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -37,10 +37,10 @@ Include 1-2 real source URLs per item from the search results. Focus on announce
         'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: 'groq/compound',
+        model: 'groq/compound-mini',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.2,
-        max_tokens: 2048
+        max_tokens: 1500
       })
     });
 
