@@ -277,7 +277,7 @@ function openDetail(i){
   document.getElementById('d-rsi').textContent=t.rsi||'—';
   document.getElementById('d-target').textContent=t.target?'$'+t.target:'—';
   document.getElementById('d-notes').value=t.notes||'';
-  document.getElementById('btn-ct').onclick=()=>window.open('https://www.capitoltrades.com/issuers='+t.symbol,'_blank');
+  document.getElementById('btn-ct').onclick=()=>window.open('https://www.capitoltrades.com/issuers/'+t.symbol,'_blank');
   document.getElementById('btn-bc').onclick=()=>window.open('https://www.barchart.com/stocks/quotes/'+t.symbol+'/options','_blank');
   updateToggles();document.getElementById('detail').classList.add('active');render();
 }
