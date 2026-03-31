@@ -107,7 +107,49 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .empty{text-align:center;padding:2rem;color:var(--hint);font-size:13px;}
 .status-msg{font-size:11px;color:var(--muted);text-align:center;padding:6px;font-family:'DM Mono',monospace;min-height:28px;}
 .spin{display:inline-block;animation:spin 1s linear infinite;}
-@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}</style>
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.jmetrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:16px;}
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;}
+.form-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:12px;}
+.fg2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:8px;}
+.fg3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:8px;}
+.ff{display:flex;flex-direction:column;gap:3px;}
+.ff label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.ff input,.ff select,.ff textarea{font-size:12px;padding:6px 9px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);color:var(--text);outline:none;width:100%;font-family:'DM Sans',sans-serif;}
+.ff input:focus,.ff select:focus,.ff textarea:focus{border-color:var(--purple);}
+.ff textarea{min-height:52px;resize:vertical;}
+.sig-checks{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.sig-checks label{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;cursor:pointer;}
+.form-footer{display:flex;justify-content:flex-end;gap:6px;}
+.trade-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.trade-card.open{border-left:3px solid var(--blue);}
+.trade-card.win{border-left:3px solid var(--green);}
+.trade-card.loss{border-left:3px solid var(--red);}
+.trade-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.trade-sym{font-family:'DM Mono',monospace;font-size:14px;font-weight:500;min-width:52px;}
+.ttype{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;}
+.tt-long{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);}
+.tt-short{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);}
+.tt-call{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.tt-put{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.tstatus{font-size:10px;padding:2px 8px;border-radius:20px;margin-left:auto;font-family:'DM Mono',monospace;}
+.ts-open{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-border);}
+.ts-win{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.ts-loss{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.tgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:8px;}
+.tf{font-size:11px;}
+.tf-label{color:var(--hint);margin-bottom:2px;}
+.tf-val{font-weight:500;color:var(--text);}
+.tf-val.win{color:var(--green);}
+.tf-val.loss{color:var(--red);}
+.trade-sigs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px;}
+.tsig{font-size:10px;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--hint);border:1px solid var(--border);}
+.tsig.on{background:var(--green-bg);color:var(--green);border-color:var(--green-border);}
+.trade-notes-text{font-size:12px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:7px;}
+.trade-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:8px;}
+.filt-row{display:flex;gap:5px;flex-wrap:wrap;}
+.filt-btn{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
+.filt-btn.active{background:var(--surface2);color:var(--text);border-color:var(--purple);}</style>
 </head>
 <body>
 <div class="app">
@@ -116,6 +158,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
     <div class="tabs">
       <button class="tab active" id="tab-signals" onclick="switchTab('signals',this)">Signals</button>
       <button class="tab" id="tab-trump" onclick="switchTab('trump',this)">Trump tracker</button>
+      <button class="tab" id="tab-journal" onclick="switchTab('journal',this)">Journal</button>
     </div>
     <div class="topbar-right" id="clock"></div>
   </div>
@@ -177,9 +220,142 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
       </div>
       <div id="trump-feed"><div class="empty">No announcements loaded yet.</div></div>
     </div>
+    <div id="page-journal" class="page">
+      <div class="jmetrics">
+        <div class="metric"><div class="metric-label">Total trades</div><div class="metric-value" id="j-total">0</div><div class="metric-sub">logged</div></div>
+        <div class="metric"><div class="metric-label">Win rate</div><div class="metric-value" id="j-wr">—</div><div class="metric-sub">closed trades</div></div>
+        <div class="metric"><div class="metric-label">Total P&L</div><div class="metric-value" id="j-pnl">$0</div><div class="metric-sub">paper</div></div>
+        <div class="metric"><div class="metric-label">Open</div><div class="metric-value" id="j-open">0</div><div class="metric-sub">active</div></div>
+      </div>
+      <div class="form-card">
+        <div class="form-title">Log a trade</div>
+        <div class="fg2">
+          <div class="ff"><label>Ticker</label><input type="text" id="jf-sym" placeholder="LGIH" maxlength="10"/></div>
+          <div class="ff"><label>Type</label><select id="jf-type"><option value="Long">Long (stock)</option><option value="Short">Short (stock)</option><option value="Call">Call (option)</option><option value="Put">Put (option)</option></select></div>
+        </div>
+        <div class="fg3">
+          <div class="ff"><label>Entry price</label><input type="number" id="jf-entry" placeholder="37.45" step="0.01"/></div>
+          <div class="ff"><label>Exit price</label><input type="number" id="jf-exit" placeholder="leave blank if open" step="0.01"/></div>
+          <div class="ff"><label>Shares / contracts</label><input type="number" id="jf-size" placeholder="100" step="1"/></div>
+        </div>
+        <div class="fg3">
+          <div class="ff"><label>Entry date</label><input type="date" id="jf-edate"/></div>
+          <div class="ff"><label>Exit date</label><input type="date" id="jf-xdate"/></div>
+          <div class="ff"><label>Signal score</label><select id="jf-score"><option value="">— select —</option><option value="Strong">Strong (3 signals)</option><option value="Watch">Watch (2 signals)</option><option value="Weak">Weak (1 signal)</option></select></div>
+        </div>
+        <div class="sig-checks">
+          <label><input type="checkbox" id="jf-sc"> Congress signal</label>
+          <label><input type="checkbox" id="jf-so"> Options flow</label>
+          <label><input type="checkbox" id="jf-st"> Technical</label>
+        </div>
+        <div class="ff" style="margin-bottom:10px;"><label>Thesis / notes</label><textarea id="jf-notes" placeholder="Why you took this trade, what you saw, what you learned..."></textarea></div>
+        <div class="form-footer">
+          <button class="btn" onclick="clearJForm()">Clear</button>
+          <button class="btn" onclick="logTrade()">Log trade</button>
+        </div>
+      </div>
+      <div class="section-head">Trade log
+        <div class="filt-row">
+          <button class="filt-btn active" onclick="setJFilter('all',this)">All</button>
+          <button class="filt-btn" onclick="setJFilter('open',this)">Open</button>
+          <button class="filt-btn" onclick="setJFilter('win',this)">Wins</button>
+          <button class="filt-btn" onclick="setJFilter('loss',this)">Losses</button>
+        </div>
+      </div>
+      <div id="trades-list"></div>
+    </div>
   </div>
 </div>
 <script>
+let trades=JSON.parse(localStorage.getItem('sd_journal')||'[]');
+let jfilter='all';
+function saveJournal(){localStorage.setItem('sd_journal',JSON.stringify(trades));}
+function jPnl(t){
+  if(!t.exit||!t.entry||!t.size)return null;
+  const diff=t.type==='Short'||t.type==='Put'?t.entry-t.exit:t.exit-t.entry;
+  return diff*t.size;
+}
+function jStatus(t){if(!t.exit)return'open';return jPnl(t)>=0?'win':'loss';}
+function setJFilter(f,el){jfilter=f;document.querySelectorAll('.filt-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderJournal();}
+function updateJMetrics(){
+  const closed=trades.filter(t=>t.exit);
+  const wins=closed.filter(t=>jPnl(t)>=0);
+  const totalPnl=closed.reduce((s,t)=>s+(jPnl(t)||0),0);
+  document.getElementById('j-total').textContent=trades.length;
+  document.getElementById('j-wr').textContent=closed.length?Math.round(wins.length/closed.length*100)+'%':'—';
+  const pel=document.getElementById('j-pnl');
+  pel.textContent=(totalPnl>=0?'+$':'-$')+Math.abs(totalPnl).toFixed(2);
+  pel.style.color=totalPnl>=0?'var(--green)':totalPnl<0?'var(--red)':'';
+  document.getElementById('j-open').textContent=trades.filter(t=>!t.exit).length;
+}
+function renderJournal(){
+  const list=document.getElementById('trades-list');
+  const filtered=trades.filter(t=>{
+    if(jfilter==='all')return true;
+    if(jfilter==='open')return!t.exit;
+    if(jfilter==='win')return t.exit&&jPnl(t)>=0;
+    if(jfilter==='loss')return t.exit&&jPnl(t)<0;
+    return true;
+  });
+  if(!filtered.length){list.innerHTML='<div class="empty">No trades yet.</div>';updateJMetrics();return;}
+  list.innerHTML=filtered.map(t=>{
+    const st=jStatus(t);
+    const p=jPnl(t);
+    const idx=trades.indexOf(t);
+    const typeClass='tt-'+t.type.toLowerCase();
+    const sigs=['congress','options','technical'];
+    const sigPills=sigs.map(s=>`<span class="tsig${t.signals&&t.signals.includes(s)?' on':''}">${s}</span>`).join('');
+    return`<div class="trade-card ${st}">
+      <div class="trade-top">
+        <div class="trade-sym">${t.symbol}</div>
+        <span class="ttype ${typeClass}">${t.type}</span>
+        ${t.score?`<span style="font-size:10px;color:var(--hint);">${t.score}</span>`:''}
+        <span class="tstatus ts-${st}">${st}</span>
+      </div>
+      <div class="tgrid">
+        <div class="tf"><div class="tf-label">Entry</div><div class="tf-val">$${t.entry}</div></div>
+        <div class="tf"><div class="tf-label">Exit</div><div class="tf-val">${t.exit?'$'+t.exit:'—'}</div></div>
+        <div class="tf"><div class="tf-label">Size</div><div class="tf-val">${t.size||'—'}</div></div>
+        <div class="tf"><div class="tf-label">P&L</div><div class="tf-val ${p===null?'':(p>=0?'win':'loss')}">${p===null?'open':(p>=0?'+$':'-$')+Math.abs(p).toFixed(2)}</div></div>
+      </div>
+      <div class="trade-sigs">${sigPills}</div>
+      ${t.notes?`<div class="trade-notes-text">${t.notes}</div>`:''}
+      <div class="trade-actions">
+        ${!t.exit?`<button class="btn" onclick="closeTrade(${idx})">Close trade</button>`:''}
+        <button class="btn" onclick="deleteTrade(${idx})">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+  updateJMetrics();
+}
+function logTrade(){
+  const sym=document.getElementById('jf-sym').value.trim().toUpperCase();
+  const entry=parseFloat(document.getElementById('jf-entry').value);
+  if(!sym||!entry){alert('Ticker and entry price required.');return;}
+  const exit=parseFloat(document.getElementById('jf-exit').value)||null;
+  const size=parseFloat(document.getElementById('jf-size').value)||null;
+  const signals=[];
+  if(document.getElementById('jf-sc').checked)signals.push('congress');
+  if(document.getElementById('jf-so').checked)signals.push('options');
+  if(document.getElementById('jf-st').checked)signals.push('technical');
+  trades.unshift({symbol:sym,type:document.getElementById('jf-type').value,entry:entry.toFixed(2),exit:exit?exit.toFixed(2):null,size,score:document.getElementById('jf-score').value||null,signals,notes:document.getElementById('jf-notes').value.trim(),entryDate:document.getElementById('jf-edate').value,exitDate:document.getElementById('jf-xdate').value});
+  saveJournal();clearJForm();renderJournal();
+}
+function clearJForm(){
+  ['jf-sym','jf-entry','jf-exit','jf-size','jf-notes','jf-edate','jf-xdate'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('jf-type').value='Long';
+  document.getElementById('jf-score').value='';
+  ['jf-sc','jf-so','jf-st'].forEach(id=>document.getElementById(id).checked=false);
+  document.getElementById('jf-edate').value=new Date().toISOString().split('T')[0];
+}
+function closeTrade(i){
+  const price=prompt('Exit price:');
+  if(!price)return;
+  trades[i].exit=parseFloat(price).toFixed(2);
+  trades[i].exitDate=new Date().toISOString().split('T')[0];
+  saveJournal();renderJournal();
+}
+function deleteTrade(i){trades.splice(i,1);saveJournal();renderJournal();}
 let tickers=JSON.parse(localStorage.getItem('sd_v2')||'null')||[
   {symbol:'LGIH',name:'LGI Homes',price:'37.45',rsi:'38',target:'75.90',congress:'green',options:'gray',technical:'amber',notes:'Tim Moore buying $250K+ in March. Spring sales event through Apr 26. RSI climbing out of oversold.'}
 ];
@@ -335,6 +511,8 @@ async function addFromTrump(sym){
   await lookupTicker(sym,idx);
 }
 render();
+clearJForm();
+renderJournal();
 </script>
 </body>
 </html>
