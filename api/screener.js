@@ -1,5 +1,6 @@
 // api/screener.js
 // Uses Yahoo Finance's query2 screener endpoint — no API key required.
+// Handles crumb/cookie auth automatically.
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -17,6 +18,42 @@ export default async function handler(req, res) {
     limit = 50,
   } = req.body || {};
 
+  // Step 1: Get a cookie by hitting Yahoo Finance
+  let cookie = '';
+  let crumb = '';
+
+  try {
+    const cookieRes = await fetch('https://fc.yahoo.com', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+      redirect: 'follow',
+    });
+    const setCookie = cookieRes.headers.get('set-cookie') || '';
+    const match = setCookie.match(/A3=[^;]+/);
+    if (match) cookie = match[0];
+  } catch (e) {
+    // fallback — try without cookie
+  }
+
+  // Step 2: Get crumb
+  try {
+    const crumbRes = await fetch('https://query2.finance.yahoo.com/v1/test/getcrumb', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Cookie': cookie,
+      },
+    });
+    crumb = await crumbRes.text();
+  } catch (e) {
+    return res.status(500).json({ error: 'Failed to get Yahoo Finance crumb: ' + e.message });
+  }
+
+  if (!crumb || crumb.includes('{')) {
+    return res.status(500).json({ error: 'Could not obtain Yahoo Finance crumb. Try again.' });
+  }
+
+  // Step 3: Build screener filters
   const operands = [];
 
   if (priceMin != null || priceMax != null) {
@@ -71,20 +108,25 @@ export default async function handler(req, res) {
     userIdType: 'guid',
   };
 
+  // Step 4: Run screener
   try {
-    const response = await fetch('https://query2.finance.yahoo.com/v1/finance/screener', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0 (compatible; signal-dash/1.0)',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      `https://query2.finance.yahoo.com/v1/finance/screener?crumb=${encodeURIComponent(crumb)}&lang=en-US&region=US`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+          'Cookie': cookie,
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
     if (!response.ok) {
       const text = await response.text();
-      throw new Error(`Yahoo error ${response.status}: ${text.slice(0, 200)}`);
+      throw new Error(`Yahoo error ${response.status}: ${text.slice(0, 300)}`);
     }
 
     const data = await response.json();
