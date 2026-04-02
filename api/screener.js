@@ -1,71 +1,126 @@
 // api/screener.js
-// Vercel serverless function — Stock Screener
-// Uses Financial Modeling Prep free tier (https://financialmodelingprep.com/developer/docs/)
-// Free tier: 250 calls/day — sufficient for personal use
-//
-// Set FMP_API_KEY in Vercel environment variables:
-//   vercel env add FMP_API_KEY
+// Uses Yahoo Finance's query2 screener endpoint — no API key required.
+// Supports: price, market cap, sector, exchange, volume filters.
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const FMP_KEY = process.env.FMP_API_KEY;
-  if (!FMP_KEY) {
-    return res.status(500).json({ error: 'FMP_API_KEY not set in environment variables' });
-  }
-
   const {
-    marketCapMin,   // number, in billions (e.g. 0.3 = $300M)
-    marketCapMax,   // number, in billions
-    priceMin,       // number
-    priceMax,       // number
-    sector,         // string, e.g. "Technology"
-    exchange,       // string, e.g. "NYSE", "NASDAQ"
-    volumeMin,      // number, average daily volume minimum
+    marketCapMin,  // billions
+    marketCapMax,
+    priceMin,
+    priceMax,
+    sector,
+    exchange,
+    volumeMin,
     limit = 50,
   } = req.body || {};
 
-  // Build FMP screener query params
-  const params = new URLSearchParams();
-  params.set('apikey', FMP_KEY);
-  params.set('limit', Math.min(limit, 100));
+  // Build Yahoo Finance screener filter operands
+  const operands = [];
 
-  if (marketCapMin != null) params.set('marketCapMoreThan', Math.round(marketCapMin * 1e9));
-  if (marketCapMax != null) params.set('marketCapLowerThan', Math.round(marketCapMax * 1e9));
-  if (priceMin != null)     params.set('priceMoreThan', priceMin);
-  if (priceMax != null)     params.set('priceLowerThan', priceMax);
-  if (sector)               params.set('sector', sector);
-  if (exchange)             params.set('exchange', exchange);
-  if (volumeMin != null)    params.set('volumeMoreThan', volumeMin);
+  if (priceMin != null || priceMax != null) {
+    operands.push({
+      operator: 'BTWN',
+      operands: ['regularMarketPrice', priceMin ?? 0, priceMax ?? 99999],
+    });
+  }
 
-  // Only return US-listed stocks
-  params.set('isEtf', 'false');
-  params.set('isActivelyTrading', 'true');
+  if (marketCapMin != null || marketCapMax != null) {
+    operands.push({
+      operator: 'BTWN',
+      operands: ['marketCap', (marketCapMin ?? 0) * 1e9, (marketCapMax ?? 1e15) * 1e9],
+    });
+  }
 
-  const url = `https://financialmodelingprep.com/api/v3/stock-screener?${params}`;
+  if (volumeMin != null) {
+    operands.push({
+      operator: 'GT',
+      operands: ['averageDailyVolume3Month', volumeMin],
+    });
+  }
+
+  // Sector map — Yahoo uses slightly different names
+  const SECTOR_MAP = {
+    'Technology': 'Technology',
+    'Healthcare': 'Healthcare',
+    'Energy': 'Energy',
+    'Financial Services': 'Financial Services',
+    'Consumer Cyclical': 'Consumer Cyclical',
+    'Consumer Defensive': 'Consumer Defensive',
+    'Industrials': 'Industrials',
+    'Basic Materials': 'Basic Materials',
+    'Real Estate': 'Real Estate',
+    'Communication Services': 'Communication Services',
+    'Utilities': 'Utilities',
+  };
+  if (sector && SECTOR_MAP[sector]) {
+    operands.push({
+      operator: 'EQ',
+      operands: ['sector', SECTOR_MAP[sector]],
+    });
+  }
+
+  if (exchange) {
+    operands.push({
+      operator: 'EQ',
+      operands: ['exchange', exchange],
+    });
+  }
+
+  // Always filter to US equities only
+  operands.push({ operator: 'EQ', operands: ['region', 'us'] });
+  operands.push({ operator: 'EQ', operands: ['quoteType', 'EQUITY'] });
+
+  const payload = {
+    offset: 0,
+    size: Math.min(limit, 100),
+    sortField: 'marketcap',
+    sortType: 'DESC',
+    quoteType: 'EQUITY',
+    query: {
+      operator: 'AND',
+      operands,
+    },
+    userId: '',
+    userIdType: 'guid',
+  };
+
+  const url = 'https://query2.finance.yahoo.com/v1/finance/screener';
 
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (compatible; signal-dash/1.0)',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
     if (!response.ok) {
       const text = await response.text();
-      throw new Error(`FMP API error ${response.status}: ${text}`);
+      throw new Error(`Yahoo Finance error ${response.status}: ${text.slice(0, 200)}`);
     }
-    const data = await response.json();
 
-    // Normalize to what Signal Dash expects
-    const results = (Array.isArray(data) ? data : []).map(s => ({
-      symbol:       s.symbol,
-      name:         s.companyName || s.name || '—',
-      price:        s.price != null ? s.price.toFixed(2) : '—',
-      marketCap:    s.marketCap != null ? formatMktCap(s.marketCap) : '—',
-      volume:       s.volume != null ? formatVol(s.volume) : '—',
-      sector:       s.sector || '—',
-      exchange:     s.exchangeShortName || s.exchange || '—',
-      beta:         s.beta != null ? s.beta.toFixed(2) : '—',
-      change:       s.changes != null ? s.changes.toFixed(2) : null,
-      changePct:    s.changesPercentage != null ? parseFloat(s.changesPercentage).toFixed(2) : null,
+    const data = await response.json();
+    const quotes = data?.finance?.result?.[0]?.quotes ?? [];
+
+    const results = quotes.map(q => ({
+      symbol:     q.symbol,
+      name:       q.longName || q.shortName || '—',
+      price:      q.regularMarketPrice != null ? q.regularMarketPrice.toFixed(2) : '—',
+      marketCap:  q.marketCap != null ? formatMktCap(q.marketCap) : '—',
+      volume:     q.regularMarketVolume != null ? formatVol(q.regularMarketVolume) : '—',
+      sector:     q.sector || '—',
+      exchange:   q.fullExchangeName || q.exchange || '—',
+      beta:       q.beta != null ? q.beta.toFixed(2) : '—',
+      changePct:  q.regularMarketChangePercent != null
+                    ? q.regularMarketChangePercent.toFixed(2)
+                    : null,
     }));
 
     res.setHeader('Cache-Control', 'no-store');
