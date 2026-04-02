@@ -56,17 +56,37 @@ export default async function handler(req, res) {
   // Step 3: Build screener filters
   const operands = [];
 
-  if (priceMin != null || priceMax != null) {
+  if (priceMin != null && priceMax != null) {
     operands.push({
       operator: 'BTWN',
-      operands: ['regularMarketPrice', priceMin ?? 0, priceMax ?? 99999],
+      operands: ['regularMarketPrice', priceMin, priceMax],
+    });
+  } else if (priceMin != null) {
+    operands.push({
+      operator: 'GT',
+      operands: ['regularMarketPrice', priceMin],
+    });
+  } else if (priceMax != null) {
+    operands.push({
+      operator: 'LT',
+      operands: ['regularMarketPrice', priceMax],
     });
   }
 
-  if (marketCapMin != null || marketCapMax != null) {
+  if (marketCapMin != null && marketCapMax != null) {
     operands.push({
       operator: 'BTWN',
-      operands: ['marketCap', (marketCapMin ?? 0) * 1e9, (marketCapMax ?? 1e15) * 1e9],
+      operands: ['marketCap', marketCapMin * 1e9, marketCapMax * 1e9],
+    });
+  } else if (marketCapMin != null) {
+    operands.push({
+      operator: 'GT',
+      operands: ['marketCap', marketCapMin * 1e9],
+    });
+  } else if (marketCapMax != null) {
+    operands.push({
+      operator: 'LT',
+      operands: ['marketCap', marketCapMax * 1e9],
     });
   }
 
