@@ -97,7 +97,7 @@ export default async function handler(req, res) {
   const payload = {
     offset: 0,
     size: Math.min(limit, 100),
-    sortField: 'marketcap',
+    sortField: 'marketCap',
     sortType: 'DESC',
     quoteType: 'EQUITY',
     query: {
