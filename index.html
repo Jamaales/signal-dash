@@ -8,13 +8,13 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --bg:#0d0b1a;--surface:#13102b;--surface2:#1a1640;--border:#2d2560;
-  --text:#e8e9eb;--muted:#9ca3af;--hint:#6b7280;
-  --green:#4ade80;--green-bg:#0d2218;--green-border:#1a4a2e;
-  --amber:#fbbf24;--amber-bg:#211a06;--amber-border:#4a3a0a;
-  --red:#f87171;--red-bg:#220d0d;--red-border:#4a1a1a;
-  --blue:#60a5fa;--blue-bg:#0d1a2e;--blue-border:#1a3a5c;
-  --purple:#a78bfa;--purple-bg:#150d2e;--purple-border:#2d1a5c;
+--bg:#0d0b1a;--surface:#13102b;--surface2:#1a1640;--border:#2d2560;
+--text:#e8e9eb;--muted:#9ca3af;--hint:#6b7280;
+--green:#4ade80;--green-bg:#0d2218;--green-border:#1a4a2e;
+--amber:#fbbf24;--amber-bg:#211a06;--amber-border:#4a3a0a;
+--red:#f87171;--red-bg:#220d0d;--red-border:#4a1a1a;
+--blue:#60a5fa;--blue-bg:#0d1a2e;--blue-border:#1a3a5c;
+--purple:#a78bfa;--purple-bg:#150d2e;--purple-border:#2d1a5c;
 }
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;min-height:100vh;}
 .app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
@@ -150,402 +150,720 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .filt-row{display:flex;gap:5px;flex-wrap:wrap;}
 .filt-btn{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
 .filt-btn.active{background:var(--surface2);color:var(--text);border-color:var(--purple);}
+
+/* ── SCREENER STYLES ── */
+.scr-filters{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;}
+.scr-filters-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.scr-filters-row2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px;}
+.scr-filter-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.scr-run-btn{font-size:12px;font-weight:500;padding:7px 18px;border:1px solid var(--green-border);border-radius:7px;background:var(--green-bg);color:var(--green);cursor:pointer;transition:all .15s;}
+.scr-run-btn:hover{background:#0d2a1c;}
+.scr-run-btn:disabled{opacity:.4;cursor:not-allowed;}
+.scr-status{font-size:11px;color:var(--hint);font-family:'DM Mono',monospace;}
+.scr-results-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.scr-count{font-size:10px;color:var(--hint);font-family:'DM Mono',monospace;}
+.scr-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border);}
+.scr-table{width:100%;border-collapse:collapse;font-size:12px;}
+.scr-table thead tr{border-bottom:1px solid var(--border);background:var(--surface2);}
+.scr-table th{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;white-space:nowrap;cursor:pointer;user-select:none;}
+.scr-table th:hover{color:var(--text);}
+.scr-table th .sort-arrow{margin-left:4px;opacity:.4;font-size:9px;}
+.scr-table th.sort-asc .sort-arrow::after{content:'▲';opacity:1;}
+.scr-table th.sort-desc .sort-arrow::after{content:'▼';opacity:1;}
+.scr-table th .sort-arrow::after{content:'⬍';}
+.scr-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
+.scr-table tbody tr:last-child{border-bottom:none;}
+.scr-table tbody tr:hover{background:var(--surface2);}
+.scr-table td{padding:9px 12px;white-space:nowrap;}
+.scr-sym{font-family:'DM Mono',monospace;font-weight:500;font-size:13px;}
+.scr-name{color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;}
+.scr-chg-pos{color:var(--green);font-family:'DM Mono',monospace;}
+.scr-chg-neg{color:var(--red);font-family:'DM Mono',monospace;}
+.scr-chg-neu{color:var(--hint);font-family:'DM Mono',monospace;}
+.scr-exch{font-size:10px;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
+.scr-add-btn{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.scr-add-btn:hover{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border);}
+.scr-add-btn.added{background:var(--green-bg);color:var(--green);border-color:var(--green-border);cursor:default;}
+.scr-preset-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.scr-preset{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
+.scr-preset:hover{background:var(--surface2);color:var(--text);}
+.scr-preset.active{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-border);}
+.scr-empty{text-align:center;padding:3rem;color:var(--hint);font-size:13px;}
+
 @media(max-width:600px){
-  .topbar{padding:10px 14px;gap:8px;}
-  .logo{font-size:12px;}
-  .tab{font-size:11px;padding:4px 10px;}
-  .topbar-right{display:none;}
-  .content{padding:12px 14px;}
-  .metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:12px;}
-  .metric{padding:10px 10px;}
-  .metric-value{font-size:18px;}
-  .metric-label{font-size:9px;}
-  .jmetrics{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .trump-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
-  .detail-actions{gap:4px;}
-  .detail-actions .btn{font-size:11px;padding:5px 8px;}
-  .ticker-row{padding:10px 10px;gap:7px;}
-  .t-symbol{min-width:44px;font-size:12px;}
-  .sig{width:22px;height:22px;font-size:8px;}
-  .score{font-size:9px;padding:2px 6px;}
-  .fg2{grid-template-columns:1fr 1fr;}
-  .fg3{grid-template-columns:1fr 1fr;}
-  .tgrid{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .section-head{flex-direction:column;align-items:flex-start;gap:8px;}
-  .filt-row{margin-top:4px;}
-  .legend{display:none;}
-  .add-row input{font-size:12px;}
-  .scan-btn{font-size:12px;padding:8px 16px;}
-  .trade-top{gap:6px;}
-  .stog{font-size:11px;padding:5px 10px;}
-  .sig-toggles{gap:5px;}
-  .sig-checks{gap:8px;}
-  .form-footer{gap:6px;}
-  .trump-card{padding:11px 12px;}
-  .trade-card{padding:10px 12px;}
-}</style>
+.topbar{padding:10px 14px;gap:8px;}
+.logo{font-size:12px;}
+.tab{font-size:11px;padding:4px 10px;}
+.topbar-right{display:none;}
+.content{padding:12px 14px;}
+.metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:12px;}
+.metric{padding:10px 10px;}
+.metric-value{font-size:18px;}
+.metric-label{font-size:9px;}
+.jmetrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+.trump-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+.detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+.detail-actions{gap:4px;}
+.detail-actions .btn{font-size:11px;padding:5px 8px;}
+.ticker-row{padding:10px 10px;gap:7px;}
+.t-symbol{min-width:44px;font-size:12px;}
+.sig{width:22px;height:22px;font-size:8px;}
+.score{font-size:9px;padding:2px 6px;}
+.fg2{grid-template-columns:1fr 1fr;}
+.fg3{grid-template-columns:1fr 1fr;}
+.tgrid{grid-template-columns:repeat(2,minmax(0,1fr));}
+.section-head{flex-direction:column;align-items:flex-start;gap:8px;}
+.filt-row{margin-top:4px;}
+.legend{display:none;}
+.add-row input{font-size:12px;}
+.scan-btn{font-size:12px;padding:8px 16px;}
+.trade-top{gap:6px;}
+.stog{font-size:11px;padding:5px 10px;}
+.sig-toggles{gap:5px;}
+.sig-checks{gap:8px;}
+.form-footer{gap:6px;}
+.trump-card{padding:11px 12px;}
+.trade-card{padding:10px 12px;}
+.scr-filters-grid{grid-template-columns:1fr 1fr;}
+.scr-filters-row2{grid-template-columns:1fr 1fr;}
+.scr-table td:nth-child(3),.scr-table th:nth-child(3){display:none;} /* hide name on mobile */
+}
+</style>
 </head>
 <body>
 <div class="app">
-  <div class="topbar">
-    <div class="logo">signal<span>.</span>dash</div>
-    <div class="tabs">
-      <button class="tab active" id="tab-signals" onclick="switchTab('signals',this)">Signals</button>
-      <button class="tab" id="tab-trump" onclick="switchTab('trump',this)">Trump tracker</button>
-      <button class="tab" id="tab-journal" onclick="switchTab('journal',this)">Journal</button>
+<div class="topbar">
+<div class="logo">signal<span>.</span>dash</div>
+<div class="tabs">
+<button class="tab active" id="tab-signals" onclick="switchTab('signals',this)">Signals</button>
+<button class="tab" id="tab-screener" onclick="switchTab('screener',this)">Screener</button>
+<button class="tab" id="tab-trump" onclick="switchTab('trump',this)">Trump tracker</button>
+<button class="tab" id="tab-journal" onclick="switchTab('journal',this)">Journal</button>
+</div>
+<div class="topbar-right" id="clock"></div>
+</div>
+
+<div class="content">
+
+<!-- ── SIGNALS ── -->
+<div id="page-signals" class="page active">
+<div class="metrics">
+<div class="metric"><div class="metric-label">Watching</div><div class="metric-value" id="cnt-w">0</div><div class="metric-sub">tickers</div></div>
+<div class="metric"><div class="metric-label">Strong</div><div class="metric-value" id="cnt-s">0</div><div class="metric-sub">3 signals</div></div>
+<div class="metric"><div class="metric-label">Watch</div><div class="metric-value" id="cnt-c">0</div><div class="metric-sub">2 signals</div></div>
+</div>
+<div class="detail" id="detail">
+<div class="detail-top">
+<span class="detail-sym" id="d-sym">—</span>
+<div class="detail-actions">
+<button class="btn" id="btn-ct">Capitol Trades ↗</button>
+<button class="btn" id="btn-bc">Barchart ↗</button>
+<button class="btn" onclick="refreshTicker()">Refresh</button>
+<button class="btn" onclick="closeDetail()">✕</button>
+</div>
+</div>
+<div class="detail-grid">
+<div class="df"><div class="df-label">Price</div><div class="df-val" id="d-price">—</div></div>
+<div class="df"><div class="df-label">RSI</div><div class="df-val" id="d-rsi">—</div></div>
+<div class="df"><div class="df-label">Target</div><div class="df-val" id="d-target">—</div></div>
+</div>
+<div class="small-label" style="margin-bottom:8px;">Signals — click to cycle</div>
+<div class="sig-toggles">
+<button class="stog" id="tog-congress" onclick="toggleSig('congress')">Congress buy</button>
+<button class="stog" id="tog-options" onclick="toggleSig('options')">Options flow</button>
+<button class="stog" id="tog-technical" onclick="toggleSig('technical')">Technical</button>
+</div>
+<div class="small-label">Notes</div>
+<textarea class="notes" id="d-notes" placeholder="Thesis, entry, exit targets..." oninput="saveNotes()"></textarea>
+</div>
+<div class="section-head">Watchlist
+<div class="legend">
+<div class="li"><div class="ld" style="background:#4ade80;"></div>confirmed</div>
+<div class="li"><div class="ld" style="background:#fbbf24;"></div>partial</div>
+<div class="li"><div class="ld" style="background:#f87171;"></div>no signal</div>
+<div class="li"><div class="ld" style="background:#3d4047;"></div>unchecked</div>
+</div>
+</div>
+<div class="watchlist" id="watchlist"></div>
+<div class="status-msg" id="lookup-status"></div>
+<div class="add-row">
+<input type="text" id="t-input" placeholder="Type ticker + Enter to auto-lookup..." maxlength="10" onkeydown="if(event.key==='Enter')addTicker()"/>
+<button id="lookup-btn" onclick="addTicker()">Lookup</button>
+</div>
+</div>
+
+<!-- ── SCREENER ── -->
+<div id="page-screener" class="page">
+  <div class="scr-filters">
+    <div class="form-title" style="margin-bottom:10px;">Filter criteria</div>
+
+    <!-- Presets -->
+    <div class="scr-preset-row">
+      <span style="font-size:10px;color:var(--hint);line-height:24px;margin-right:4px;">Presets:</span>
+      <button class="scr-preset" onclick="applyPreset('swing')">Swing candidates</button>
+      <button class="scr-preset" onclick="applyPreset('small')">Small caps</button>
+      <button class="scr-preset" onclick="applyPreset('energy')">Energy sector</button>
+      <button class="scr-preset" onclick="applyPreset('tech')">Tech mid-cap</button>
+      <button class="scr-preset" onclick="applyPreset('clear')">Clear all</button>
     </div>
-    <div class="topbar-right" id="clock"></div>
+
+    <!-- Row 1: Market Cap + Price -->
+    <div class="scr-filters-grid">
+      <div class="ff">
+        <label>Market cap min ($B)</label>
+        <input type="number" id="scr-mcmin" placeholder="e.g. 0.5" step="0.1" min="0"/>
+      </div>
+      <div class="ff">
+        <label>Market cap max ($B)</label>
+        <input type="number" id="scr-mcmax" placeholder="e.g. 10" step="0.1" min="0"/>
+      </div>
+      <div class="ff">
+        <label>Price min ($)</label>
+        <input type="number" id="scr-pmin" placeholder="e.g. 5" step="1" min="0"/>
+      </div>
+    </div>
+
+    <!-- Row 2: Price max + Volume + Sector + Exchange -->
+    <div class="scr-filters-row2">
+      <div class="ff">
+        <label>Price max ($)</label>
+        <input type="number" id="scr-pmax" placeholder="e.g. 200" step="1" min="0"/>
+      </div>
+      <div class="ff">
+        <label>Avg volume min</label>
+        <input type="number" id="scr-volmin" placeholder="e.g. 500000" step="100000" min="0"/>
+      </div>
+      <div class="ff">
+        <label>Sector</label>
+        <select id="scr-sector">
+          <option value="">Any sector</option>
+          <option>Technology</option>
+          <option>Healthcare</option>
+          <option>Energy</option>
+          <option>Financial Services</option>
+          <option>Consumer Cyclical</option>
+          <option>Consumer Defensive</option>
+          <option>Industrials</option>
+          <option>Basic Materials</option>
+          <option>Real Estate</option>
+          <option>Communication Services</option>
+          <option>Utilities</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="scr-filter-footer">
+      <div class="ff" style="flex-direction:row;align-items:center;gap:10px;">
+        <label style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;">Exchange</label>
+        <select id="scr-exchange" style="font-size:12px;padding:6px 9px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);color:var(--text);outline:none;font-family:'DM Sans',sans-serif;min-width:120px;">
+          <option value="">Any</option>
+          <option value="NYSE">NYSE</option>
+          <option value="NASDAQ">NASDAQ</option>
+          <option value="AMEX">AMEX</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="scr-status" id="scr-status"></span>
+        <button class="scr-run-btn" id="scr-run-btn" onclick="runScreener()">Run screen</button>
+      </div>
+    </div>
   </div>
-  <div class="content">
-    <div id="page-signals" class="page active">
-      <div class="metrics">
-        <div class="metric"><div class="metric-label">Watching</div><div class="metric-value" id="cnt-w">0</div><div class="metric-sub">tickers</div></div>
-        <div class="metric"><div class="metric-label">Strong</div><div class="metric-value" id="cnt-s">0</div><div class="metric-sub">3 signals</div></div>
-        <div class="metric"><div class="metric-label">Watch</div><div class="metric-value" id="cnt-c">0</div><div class="metric-sub">2 signals</div></div>
-      </div>
-      <div class="detail" id="detail">
-        <div class="detail-top">
-          <span class="detail-sym" id="d-sym">—</span>
-          <div class="detail-actions">
-            <button class="btn" id="btn-ct">Capitol Trades ↗</button>
-            <button class="btn" id="btn-bc">Barchart ↗</button>
-            <button class="btn" onclick="refreshTicker()">Refresh</button>
-            <button class="btn" onclick="closeDetail()">✕</button>
-          </div>
-        </div>
-        <div class="detail-grid">
-          <div class="df"><div class="df-label">Price</div><div class="df-val" id="d-price">—</div></div>
-          <div class="df"><div class="df-label">RSI</div><div class="df-val" id="d-rsi">—</div></div>
-          <div class="df"><div class="df-label">Target</div><div class="df-val" id="d-target">—</div></div>
-        </div>
-        <div class="small-label" style="margin-bottom:8px;">Signals — click to cycle</div>
-        <div class="sig-toggles">
-          <button class="stog" id="tog-congress" onclick="toggleSig('congress')">Congress buy</button>
-          <button class="stog" id="tog-options" onclick="toggleSig('options')">Options flow</button>
-          <button class="stog" id="tog-technical" onclick="toggleSig('technical')">Technical</button>
-        </div>
-        <div class="small-label">Notes</div>
-        <textarea class="notes" id="d-notes" placeholder="Thesis, entry, exit targets..." oninput="saveNotes()"></textarea>
-      </div>
-      <div class="section-head">Watchlist
-        <div class="legend">
-          <div class="li"><div class="ld" style="background:#4ade80;"></div>confirmed</div>
-          <div class="li"><div class="ld" style="background:#fbbf24;"></div>partial</div>
-          <div class="li"><div class="ld" style="background:#f87171;"></div>no signal</div>
-          <div class="li"><div class="ld" style="background:#3d4047;"></div>unchecked</div>
-        </div>
-      </div>
-      <div class="watchlist" id="watchlist"></div>
-      <div class="status-msg" id="lookup-status"></div>
-      <div class="add-row">
-        <input type="text" id="t-input" placeholder="Type ticker + Enter to auto-lookup..." maxlength="10" onkeydown="if(event.key==='Enter')addTicker()"/>
-        <button id="lookup-btn" onclick="addTicker()">Lookup</button>
-      </div>
-    </div>
-    <div id="page-trump" class="page">
-      <div class="trump-metrics">
-        <div class="metric"><div class="metric-label">Loaded</div><div class="metric-value" id="tr-count">0</div><div class="metric-sub">announcements</div></div>
-        <div class="metric"><div class="metric-label">High impact</div><div class="metric-value" id="tr-high">0</div><div class="metric-sub">market movers</div></div>
-      </div>
-      <div class="scan-box">
-        <p>One click — scans Trump's latest announcements, Truth Social posts, and policy news, then analyzes each for market impact and flags tickers on your watchlist.</p>
-        <button class="scan-btn" id="scan-btn" onclick="runScan()">Scan latest announcements</button>
-        <div class="last-scan" id="last-scan"></div>
-      </div>
-      <div id="trump-feed"><div class="empty">No announcements loaded yet.</div></div>
-    </div>
-    <div id="page-journal" class="page">
-      <div class="jmetrics">
-        <div class="metric"><div class="metric-label">Total trades</div><div class="metric-value" id="j-total">0</div><div class="metric-sub">logged</div></div>
-        <div class="metric"><div class="metric-label">Win rate</div><div class="metric-value" id="j-wr">—</div><div class="metric-sub">closed trades</div></div>
-        <div class="metric"><div class="metric-label">Total P&L</div><div class="metric-value" id="j-pnl">$0</div><div class="metric-sub">paper</div></div>
-        <div class="metric"><div class="metric-label">Open</div><div class="metric-value" id="j-open">0</div><div class="metric-sub">active</div></div>
-      </div>
-      <div class="form-card">
-        <div class="form-title">Log a trade</div>
-        <div class="fg2">
-          <div class="ff"><label>Ticker</label><input type="text" id="jf-sym" placeholder="LGIH" maxlength="10"/></div>
-          <div class="ff"><label>Type</label><select id="jf-type"><option value="Long">Long (stock)</option><option value="Short">Short (stock)</option><option value="Call">Call (option)</option><option value="Put">Put (option)</option></select></div>
-        </div>
-        <div class="fg3">
-          <div class="ff"><label>Entry price</label><input type="number" id="jf-entry" placeholder="37.45" step="0.01"/></div>
-          <div class="ff"><label>Exit price</label><input type="number" id="jf-exit" placeholder="leave blank if open" step="0.01"/></div>
-          <div class="ff"><label>Shares / contracts</label><input type="number" id="jf-size" placeholder="100" step="1"/></div>
-        </div>
-        <div class="fg3">
-          <div class="ff"><label>Entry date</label><input type="date" id="jf-edate"/></div>
-          <div class="ff"><label>Exit date</label><input type="date" id="jf-xdate"/></div>
-          <div class="ff"><label>Signal score</label><select id="jf-score"><option value="">— select —</option><option value="Strong">Strong (3 signals)</option><option value="Watch">Watch (2 signals)</option><option value="Weak">Weak (1 signal)</option></select></div>
-        </div>
-        <div class="sig-checks">
-          <label><input type="checkbox" id="jf-sc"> Congress signal</label>
-          <label><input type="checkbox" id="jf-so"> Options flow</label>
-          <label><input type="checkbox" id="jf-st"> Technical</label>
-        </div>
-        <div class="ff" style="margin-bottom:10px;"><label>Thesis / notes</label><textarea id="jf-notes" placeholder="Why you took this trade, what you saw, what you learned..."></textarea></div>
-        <div class="form-footer">
-          <button class="btn" onclick="clearJForm()">Clear</button>
-          <button class="btn" onclick="logTrade()">Log trade</button>
-        </div>
-      </div>
-      <div class="section-head">Trade log
-        <div class="filt-row">
-          <button class="filt-btn active" onclick="setJFilter('all',this)">All</button>
-          <button class="filt-btn" onclick="setJFilter('open',this)">Open</button>
-          <button class="filt-btn" onclick="setJFilter('win',this)">Wins</button>
-          <button class="filt-btn" onclick="setJFilter('loss',this)">Losses</button>
-        </div>
-      </div>
-      <div id="trades-list"></div>
-    </div>
+
+  <!-- Results -->
+  <div class="scr-results-head">
+    <div class="section-head" style="margin-bottom:0;">Results</div>
+    <div class="scr-count" id="scr-count"></div>
+  </div>
+  <div id="scr-results">
+    <div class="scr-empty">Set filters above and run the screen.</div>
   </div>
 </div>
+
+<!-- ── TRUMP TRACKER ── -->
+<div id="page-trump" class="page">
+<div class="trump-metrics">
+<div class="metric"><div class="metric-label">Loaded</div><div class="metric-value" id="tr-count">0</div><div class="metric-sub">announcements</div></div>
+<div class="metric"><div class="metric-label">High impact</div><div class="metric-value" id="tr-high">0</div><div class="metric-sub">market movers</div></div>
+</div>
+<div class="scan-box">
+<p>One click — scans Trump's latest announcements, Truth Social posts, and policy news, then analyzes each for market impact and flags tickers on your watchlist.</p>
+<button class="scan-btn" id="scan-btn" onclick="runScan()">Scan latest announcements</button>
+<div class="last-scan" id="last-scan"></div>
+</div>
+<div id="trump-feed"><div class="empty">No announcements loaded yet.</div></div>
+</div>
+
+<!-- ── JOURNAL ── -->
+<div id="page-journal" class="page">
+<div class="jmetrics">
+<div class="metric"><div class="metric-label">Total trades</div><div class="metric-value" id="j-total">0</div><div class="metric-sub">logged</div></div>
+<div class="metric"><div class="metric-label">Win rate</div><div class="metric-value" id="j-wr">—</div><div class="metric-sub">closed trades</div></div>
+<div class="metric"><div class="metric-label">Total P&L</div><div class="metric-value" id="j-pnl">$0</div><div class="metric-sub">paper</div></div>
+<div class="metric"><div class="metric-label">Open</div><div class="metric-value" id="j-open">0</div><div class="metric-sub">active</div></div>
+</div>
+<div class="form-card">
+<div class="form-title">Log a trade</div>
+<div class="fg2">
+<div class="ff"><label>Ticker</label><input type="text" id="jf-sym" placeholder="LGIH" maxlength="10"/></div>
+<div class="ff"><label>Type</label><select id="jf-type"><option value="Long">Long (stock)</option><option value="Short">Short (stock)</option><option value="Call">Call (option)</option><option value="Put">Put (option)</option></select></div>
+</div>
+<div class="fg3">
+<div class="ff"><label>Entry price</label><input type="number" id="jf-entry" placeholder="37.45" step="0.01"/></div>
+<div class="ff"><label>Exit price</label><input type="number" id="jf-exit" placeholder="leave blank if open" step="0.01"/></div>
+<div class="ff"><label>Shares / contracts</label><input type="number" id="jf-size" placeholder="100" step="1"/></div>
+</div>
+<div class="fg3">
+<div class="ff"><label>Entry date</label><input type="date" id="jf-edate"/></div>
+<div class="ff"><label>Exit date</label><input type="date" id="jf-xdate"/></div>
+<div class="ff"><label>Signal score</label><select id="jf-score"><option value="">— select —</option><option value="Strong">Strong (3 signals)</option><option value="Watch">Watch (2 signals)</option><option value="Weak">Weak (1 signal)</option></select></div>
+</div>
+<div class="sig-checks">
+<label><input type="checkbox" id="jf-sc"> Congress signal</label>
+<label><input type="checkbox" id="jf-so"> Options flow</label>
+<label><input type="checkbox" id="jf-st"> Technical</label>
+</div>
+<div class="ff" style="margin-bottom:10px;"><label>Thesis / notes</label><textarea id="jf-notes" placeholder="Why you took this trade, what you saw, what you learned..."></textarea></div>
+<div class="form-footer">
+<button class="btn" onclick="clearJForm()">Clear</button>
+<button class="btn" onclick="logTrade()">Log trade</button>
+</div>
+</div>
+<div class="section-head">Trade log
+<div class="filt-row">
+<button class="filt-btn active" onclick="setJFilter('all',this)">All</button>
+<button class="filt-btn" onclick="setJFilter('open',this)">Open</button>
+<button class="filt-btn" onclick="setJFilter('win',this)">Wins</button>
+<button class="filt-btn" onclick="setJFilter('loss',this)">Losses</button>
+</div>
+</div>
+<div id="trades-list"></div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /app -->
+
 <script>
+// ── JOURNAL ──
 let trades=JSON.parse(localStorage.getItem('sd_journal')||'[]');
 let jfilter='all';
 function saveJournal(){localStorage.setItem('sd_journal',JSON.stringify(trades));}
 function jPnl(t){
-  if(!t.exit||!t.entry||!t.size)return null;
-  const diff=t.type==='Short'||t.type==='Put'?t.entry-t.exit:t.exit-t.entry;
-  return diff*t.size;
+if(!t.exit||!t.entry||!t.size)return null;
+const diff=t.type==='Short'||t.type==='Put'?t.entry-t.exit:t.exit-t.entry;
+return diff*t.size;
 }
 function jStatus(t){if(!t.exit)return'open';return jPnl(t)>=0?'win':'loss';}
 function setJFilter(f,el){jfilter=f;document.querySelectorAll('.filt-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderJournal();}
 function updateJMetrics(){
-  const closed=trades.filter(t=>t.exit);
-  const wins=closed.filter(t=>jPnl(t)>=0);
-  const totalPnl=closed.reduce((s,t)=>s+(jPnl(t)||0),0);
-  document.getElementById('j-total').textContent=trades.length;
-  document.getElementById('j-wr').textContent=closed.length?Math.round(wins.length/closed.length*100)+'%':'—';
-  const pel=document.getElementById('j-pnl');
-  pel.textContent=(totalPnl>=0?'+$':'-$')+Math.abs(totalPnl).toFixed(2);
-  pel.style.color=totalPnl>=0?'var(--green)':totalPnl<0?'var(--red)':'';
-  document.getElementById('j-open').textContent=trades.filter(t=>!t.exit).length;
+const closed=trades.filter(t=>t.exit);
+const wins=closed.filter(t=>jPnl(t)>=0);
+const totalPnl=closed.reduce((s,t)=>s+(jPnl(t)||0),0);
+document.getElementById('j-total').textContent=trades.length;
+document.getElementById('j-wr').textContent=closed.length?Math.round(wins.length/closed.length*100)+'%':'—';
+const pel=document.getElementById('j-pnl');
+pel.textContent=(totalPnl>=0?'+$':'-$')+Math.abs(totalPnl).toFixed(2);
+pel.style.color=totalPnl>=0?'var(--green)':totalPnl<0?'var(--red)':'';
+document.getElementById('j-open').textContent=trades.filter(t=>!t.exit).length;
 }
 function renderJournal(){
-  const list=document.getElementById('trades-list');
-  const filtered=trades.filter(t=>{
-    if(jfilter==='all')return true;
-    if(jfilter==='open')return!t.exit;
-    if(jfilter==='win')return t.exit&&jPnl(t)>=0;
-    if(jfilter==='loss')return t.exit&&jPnl(t)<0;
-    return true;
-  });
-  if(!filtered.length){list.innerHTML='<div class="empty">No trades yet.</div>';updateJMetrics();return;}
-  list.innerHTML=filtered.map(t=>{
-    const st=jStatus(t);
-    const p=jPnl(t);
-    const idx=trades.indexOf(t);
-    const typeClass='tt-'+t.type.toLowerCase();
-    const sigs=['congress','options','technical'];
-    const sigPills=sigs.map(s=>`<span class="tsig${t.signals&&t.signals.includes(s)?' on':''}">${s}</span>`).join('');
-    return`<div class="trade-card ${st}">
-      <div class="trade-top">
-        <div class="trade-sym">${t.symbol}</div>
-        <span class="ttype ${typeClass}">${t.type}</span>
-        ${t.score?`<span style="font-size:10px;color:var(--hint);">${t.score}</span>`:''}
-        <span class="tstatus ts-${st}">${st}</span>
-      </div>
-      <div class="tgrid">
-        <div class="tf"><div class="tf-label">Entry</div><div class="tf-val">$${t.entry}</div></div>
-        <div class="tf"><div class="tf-label">Exit</div><div class="tf-val">${t.exit?'$'+t.exit:'—'}</div></div>
-        <div class="tf"><div class="tf-label">Size</div><div class="tf-val">${t.size||'—'}</div></div>
-        <div class="tf"><div class="tf-label">P&L</div><div class="tf-val ${p===null?'':(p>=0?'win':'loss')}">${p===null?'open':(p>=0?'+$':'-$')+Math.abs(p).toFixed(2)}</div></div>
-      </div>
-      <div class="trade-sigs">${sigPills}</div>
-      ${t.notes?`<div class="trade-notes-text">${t.notes}</div>`:''}
-      <div class="trade-actions">
-        ${!t.exit?`<button class="btn" onclick="closeTrade(${idx})">Close trade</button>`:''}
-        <button class="btn" onclick="deleteTrade(${idx})">Remove</button>
-      </div>
-    </div>`;
-  }).join('');
-  updateJMetrics();
+const list=document.getElementById('trades-list');
+const filtered=trades.filter(t=>{
+if(jfilter==='all')return true;
+if(jfilter==='open')return!t.exit;
+if(jfilter==='win')return t.exit&&jPnl(t)>=0;
+if(jfilter==='loss')return t.exit&&jPnl(t)<0;
+return true;
+});
+if(!filtered.length){list.innerHTML='<div class="empty">No trades yet.</div>';updateJMetrics();return;}
+list.innerHTML=filtered.map(t=>{
+const st=jStatus(t);
+const p=jPnl(t);
+const idx=trades.indexOf(t);
+const typeClass='tt-'+t.type.toLowerCase();
+const sigs=['congress','options','technical'];
+const sigPills=sigs.map(s=>`<span class="tsig${t.signals&&t.signals.includes(s)?' on':''}">${s}</span>`).join('');
+return`<div class="trade-card ${st}">
+<div class="trade-top">
+<div class="trade-sym">${t.symbol}</div>
+<span class="ttype ${typeClass}">${t.type}</span>
+${t.score?`<span style="font-size:10px;color:var(--hint);">${t.score}</span>`:''}
+<span class="tstatus ts-${st}">${st}</span>
+</div>
+<div class="tgrid">
+<div class="tf"><div class="tf-label">Entry</div><div class="tf-val">$${t.entry}</div></div>
+<div class="tf"><div class="tf-label">Exit</div><div class="tf-val">${t.exit?'$'+t.exit:'—'}</div></div>
+<div class="tf"><div class="tf-label">Size</div><div class="tf-val">${t.size||'—'}</div></div>
+<div class="tf"><div class="tf-label">P&L</div><div class="tf-val ${p===null?'':(p>=0?'win':'loss')}">${p===null?'open':(p>=0?'+$':'-$')+Math.abs(p).toFixed(2)}</div></div>
+</div>
+<div class="trade-sigs">${sigPills}</div>
+${t.notes?`<div class="trade-notes-text">${t.notes}</div>`:''}
+<div class="trade-actions">
+${!t.exit?`<button class="btn" onclick="closeTrade(${idx})">Close trade</button>`:''}
+<button class="btn" onclick="deleteTrade(${idx})">Remove</button>
+</div>
+</div>`;
+}).join('');
+updateJMetrics();
 }
 function logTrade(){
-  const sym=document.getElementById('jf-sym').value.trim().toUpperCase();
-  const entry=parseFloat(document.getElementById('jf-entry').value);
-  if(!sym||!entry){alert('Ticker and entry price required.');return;}
-  const exit=parseFloat(document.getElementById('jf-exit').value)||null;
-  const size=parseFloat(document.getElementById('jf-size').value)||null;
-  const signals=[];
-  if(document.getElementById('jf-sc').checked)signals.push('congress');
-  if(document.getElementById('jf-so').checked)signals.push('options');
-  if(document.getElementById('jf-st').checked)signals.push('technical');
-  trades.unshift({symbol:sym,type:document.getElementById('jf-type').value,entry:entry.toFixed(2),exit:exit?exit.toFixed(2):null,size,score:document.getElementById('jf-score').value||null,signals,notes:document.getElementById('jf-notes').value.trim(),entryDate:document.getElementById('jf-edate').value,exitDate:document.getElementById('jf-xdate').value});
-  saveJournal();clearJForm();renderJournal();
+const sym=document.getElementById('jf-sym').value.trim().toUpperCase();
+const entry=parseFloat(document.getElementById('jf-entry').value);
+if(!sym||!entry){alert('Ticker and entry price required.');return;}
+const exit=parseFloat(document.getElementById('jf-exit').value)||null;
+const size=parseFloat(document.getElementById('jf-size').value)||null;
+const signals=[];
+if(document.getElementById('jf-sc').checked)signals.push('congress');
+if(document.getElementById('jf-so').checked)signals.push('options');
+if(document.getElementById('jf-st').checked)signals.push('technical');
+trades.unshift({symbol:sym,type:document.getElementById('jf-type').value,entry:entry.toFixed(2),exit:exit?exit.toFixed(2):null,size,score:document.getElementById('jf-score').value||null,signals,notes:document.getElementById('jf-notes').value.trim(),entryDate:document.getElementById('jf-edate').value,exitDate:document.getElementById('jf-xdate').value});
+saveJournal();clearJForm();renderJournal();
 }
 function clearJForm(){
-  ['jf-sym','jf-entry','jf-exit','jf-size','jf-notes','jf-edate','jf-xdate'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('jf-type').value='Long';
-  document.getElementById('jf-score').value='';
-  ['jf-sc','jf-so','jf-st'].forEach(id=>document.getElementById(id).checked=false);
-  document.getElementById('jf-edate').value=new Date().toISOString().split('T')[0];
+['jf-sym','jf-entry','jf-exit','jf-size','jf-notes','jf-edate','jf-xdate'].forEach(id=>document.getElementById(id).value='');
+document.getElementById('jf-type').value='Long';
+document.getElementById('jf-score').value='';
+['jf-sc','jf-so','jf-st'].forEach(id=>document.getElementById(id).checked=false);
+document.getElementById('jf-edate').value=new Date().toISOString().split('T')[0];
 }
 function closeTrade(i){
-  const price=prompt('Exit price:');
-  if(!price)return;
-  trades[i].exit=parseFloat(price).toFixed(2);
-  trades[i].exitDate=new Date().toISOString().split('T')[0];
-  saveJournal();renderJournal();
+const price=prompt('Exit price:');
+if(!price)return;
+trades[i].exit=parseFloat(price).toFixed(2);
+trades[i].exitDate=new Date().toISOString().split('T')[0];
+saveJournal();renderJournal();
 }
 function deleteTrade(i){trades.splice(i,1);saveJournal();renderJournal();}
+
+// ── SIGNALS / WATCHLIST ──
 let tickers=JSON.parse(localStorage.getItem('sd_v2')||'null')||[
-  {symbol:'LGIH',name:'LGI Homes',price:'37.45',rsi:'38',target:'75.90',congress:'green',options:'gray',technical:'amber',notes:'Tim Moore buying $250K+ in March. Spring sales event through Apr 26. RSI climbing out of oversold.'}
+{symbol:'LGIH',name:'LGI Homes',price:'37.45',rsi:'38',target:'75.90',congress:'green',options:'gray',technical:'amber',notes:'Tim Moore buying $250K+ in March. Spring sales event through Apr 26. RSI climbing out of oversold.'}
 ];
 let selected=null,trumpItems=[];
 function save(){localStorage.setItem('sd_v2',JSON.stringify(tickers));}
 function clock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});}
 setInterval(clock,1000);clock();
 function switchTab(tab,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  el.classList.add('active');document.getElementById('page-'+tab).classList.add('active');
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+el.classList.add('active');document.getElementById('page-'+tab).classList.add('active');
 }
 function scoreOf(t){
-  const g=[t.congress,t.options,t.technical].filter(s=>s==='green').length;
-  const a=[t.congress,t.options,t.technical].filter(s=>s==='amber').length;
-  if(g===3)return'strong';if(g>=2||(g===1&&a>=1))return'watch';
-  if(g===1||a>=1)return'weak';return'none';
+const g=[t.congress,t.options,t.technical].filter(s=>s==='green').length;
+const a=[t.congress,t.options,t.technical].filter(s=>s==='amber').length;
+if(g===3)return'strong';if(g>=2||(g===1&&a>=1))return'watch';
+if(g===1||a>=1)return'weak';return'none';
 }
 function sigCls(v){return v==='green'?'sig-green':v==='red'?'sig-red':v==='amber'?'sig-amber':'sig-gray';}
 function scoreMeta(s){
-  if(s==='strong')return{t:'strong',c:'score-strong'};
-  if(s==='watch')return{t:'watch',c:'score-watch'};
-  if(s==='weak')return{t:'weak',c:'score-weak'};
-  return{t:'—',c:'score-none'};
+if(s==='strong')return{t:'strong',c:'score-strong'};
+if(s==='watch')return{t:'watch',c:'score-watch'};
+if(s==='weak')return{t:'weak',c:'score-weak'};
+return{t:'—',c:'score-none'};
 }
 function updateMetrics(){
-  document.getElementById('cnt-w').textContent=tickers.length;
-  document.getElementById('cnt-s').textContent=tickers.filter(t=>scoreOf(t)==='strong').length;
-  document.getElementById('cnt-c').textContent=tickers.filter(t=>scoreOf(t)==='watch').length;
+document.getElementById('cnt-w').textContent=tickers.length;
+document.getElementById('cnt-s').textContent=tickers.filter(t=>scoreOf(t)==='strong').length;
+document.getElementById('cnt-c').textContent=tickers.filter(t=>scoreOf(t)==='watch').length;
 }
 function render(){
-  const wl=document.getElementById('watchlist');
-  if(!tickers.length){wl.innerHTML='<div class="empty">No tickers yet.</div>';updateMetrics();return;}
-  wl.innerHTML=tickers.map((t,i)=>{
-    const sm=scoreMeta(scoreOf(t));
-    return`<div class="ticker-row${selected===i?' selected':''}${t._loading?' loading':''}" onclick="openDetail(${i})">
-      <div class="t-symbol">${t.symbol}</div>
-      <div class="t-name">${t._loading?'looking up...':t.name||'—'}</div>
-      <div class="signals">
-        <div class="sig ${sigCls(t.congress)}">C</div>
-        <div class="sig ${sigCls(t.options)}">O</div>
-        <div class="sig ${sigCls(t.technical)}">T</div>
-      </div>
-      <span class="score ${sm.c}">${sm.t}</span>
-      <button class="rm-btn" onclick="event.stopPropagation();removeTicker(${i})">✕</button>
-    </div>`;
-  }).join('');
-  updateMetrics();
+const wl=document.getElementById('watchlist');
+if(!tickers.length){wl.innerHTML='<div class="empty">No tickers yet.</div>';updateMetrics();return;}
+wl.innerHTML=tickers.map((t,i)=>{
+const sm=scoreMeta(scoreOf(t));
+return`<div class="ticker-row${selected===i?' selected':''}${t._loading?' loading':''}" onclick="openDetail(${i})">
+<div class="t-symbol">${t.symbol}</div>
+<div class="t-name">${t._loading?'looking up...':t.name||'—'}</div>
+<div class="signals">
+<div class="sig ${sigCls(t.congress)}">C</div>
+<div class="sig ${sigCls(t.options)}">O</div>
+<div class="sig ${sigCls(t.technical)}">T</div>
+</div>
+<span class="score ${sm.c}">${sm.t}</span>
+<button class="rm-btn" onclick="event.stopPropagation();removeTicker(${i})">✕</button>
+</div>`;
+}).join('');
+updateMetrics();
 }
-async function addTicker(){
-  const inp=document.getElementById('t-input');
-  const sym=inp.value.trim().toUpperCase();
-  if(!sym||tickers.find(t=>t.symbol===sym)){inp.value='';return;}
-  const idx=tickers.length;
-  tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',congress:'gray',options:'gray',technical:'gray',notes:'',_loading:true});
-  inp.value='';render();
-  await lookupTicker(sym,idx);
+async function addTicker(sym){
+const inp=document.getElementById('t-input');
+if(!sym)sym=inp.value.trim().toUpperCase();
+if(!sym||tickers.find(t=>t.symbol===sym)){if(inp)inp.value='';return;}
+const idx=tickers.length;
+tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',congress:'gray',options:'gray',technical:'gray',notes:'',_loading:true});
+if(inp)inp.value='';render();
+await lookupTicker(sym,idx);
 }
 async function lookupTicker(sym,idx){
-  const st=document.getElementById('lookup-status');
-  const btn=document.getElementById('lookup-btn');
-  st.innerHTML='<span class="spin">⟳</span> Looking up '+sym+'...';
-  btn.disabled=true;
-  try{
-    const res=await fetch('/api/lookup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symbol:sym})});
-    const data=await res.json();
-    if(data.error)throw new Error(data.error);
-    tickers[idx]={...data,_loading:false};
-    save();render();openDetail(idx);
-    st.textContent='';
-  }catch(err){
-    tickers[idx]._loading=false;
-    tickers[idx].name='Lookup failed';
-    save();render();
-    st.textContent='Error: '+err.message;
-    setTimeout(()=>st.textContent='',4000);
-  }
-  btn.disabled=false;
+const st=document.getElementById('lookup-status');
+const btn=document.getElementById('lookup-btn');
+st.innerHTML='<span class="spin">⟳</span> Looking up '+sym+'...';
+btn.disabled=true;
+try{
+const res=await fetch('/api/lookup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symbol:sym})});
+const data=await res.json();
+if(data.error)throw new Error(data.error);
+tickers[idx]={...data,_loading:false};
+save();render();openDetail(idx);
+st.textContent='';
+}catch(err){
+tickers[idx]._loading=false;
+tickers[idx].name='Lookup failed';
+save();render();
+st.textContent='Error: '+err.message;
+setTimeout(()=>st.textContent='',4000);
+}
+btn.disabled=false;
 }
 async function refreshTicker(){
-  if(selected===null)return;
-  tickers[selected]._loading=true;render();
-  await lookupTicker(tickers[selected].symbol,selected);
+if(selected===null)return;
+tickers[selected]._loading=true;render();
+await lookupTicker(tickers[selected].symbol,selected);
 }
 function removeTicker(i){
-  if(selected===i)closeDetail();
-  tickers.splice(i,1);
-  if(selected!==null&&selected>i)selected--;
-  save();render();
+if(selected===i)closeDetail();
+tickers.splice(i,1);
+if(selected!==null&&selected>i)selected--;
+save();render();
 }
 function openDetail(i){
-  selected=i;const t=tickers[i];
-  document.getElementById('d-sym').textContent=t.symbol;
-  document.getElementById('d-price').textContent=t.price||'—';
-  document.getElementById('d-rsi').textContent=t.rsi||'—';
-  document.getElementById('d-target').textContent=t.target?'$'+t.target:'—';
-  document.getElementById('d-notes').value=t.notes||'';
-  document.getElementById('btn-ct').onclick=()=>window.open('https://www.capitoltrades.com/issuers/'+t.symbol,'_blank');
-  document.getElementById('btn-bc').onclick=()=>window.open('https://www.barchart.com/stocks/quotes/'+t.symbol+'/options','_blank');
-  updateToggles();document.getElementById('detail').classList.add('active');render();
+selected=i;const t=tickers[i];
+document.getElementById('d-sym').textContent=t.symbol;
+document.getElementById('d-price').textContent=t.price||'—';
+document.getElementById('d-rsi').textContent=t.rsi||'—';
+document.getElementById('d-target').textContent=t.target?'$'+t.target:'—';
+document.getElementById('d-notes').value=t.notes||'';
+document.getElementById('btn-ct').onclick=()=>window.open('https://www.capitoltrades.com/issuers/'+t.symbol,'_blank');
+document.getElementById('btn-bc').onclick=()=>window.open('https://www.barchart.com/stocks/quotes/'+t.symbol+'/options','_blank');
+updateToggles();document.getElementById('detail').classList.add('active');render();
 }
 function closeDetail(){selected=null;document.getElementById('detail').classList.remove('active');render();}
 function updateToggles(){
-  if(selected===null)return;
-  const t=tickers[selected];
-  ['congress','options','technical'].forEach(k=>{
-    const b=document.getElementById('tog-'+k);b.className='stog';
-    if(t[k]==='green')b.classList.add('g');
-    else if(t[k]==='amber')b.classList.add('a');
-    else if(t[k]==='red')b.classList.add('r');
-  });
+if(selected===null)return;
+const t=tickers[selected];
+['congress','options','technical'].forEach(k=>{
+const b=document.getElementById('tog-'+k);b.className='stog';
+if(t[k]==='green')b.classList.add('g');
+else if(t[k]==='amber')b.classList.add('a');
+else if(t[k]==='red')b.classList.add('r');
+});
 }
 function toggleSig(key){
-  if(selected===null)return;
-  const cycle={gray:'amber',amber:'green',green:'red',red:'gray'};
-  tickers[selected][key]=cycle[tickers[selected][key]]||'gray';
-  updateToggles();save();render();
+if(selected===null)return;
+const cycle={gray:'amber',amber:'green',green:'red',red:'gray'};
+tickers[selected][key]=cycle[tickers[selected][key]]||'gray';
+updateToggles();save();render();
 }
 function saveNotes(){if(selected!==null){tickers[selected].notes=document.getElementById('d-notes').value;save();}}
+
+// ── TRUMP TRACKER ──
 async function runScan(){
-  const btn=document.getElementById('scan-btn');
-  const feed=document.getElementById('trump-feed');
-  btn.disabled=true;btn.textContent='Scanning...';
-  feed.innerHTML='<div class="empty"><span class="spin">⟳</span> Scanning...</div>';
-  try{
-    const res=await fetch('/api/trump-scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({watchlist:tickers.map(t=>t.symbol).join(', ')})});
-    const data=await res.json();
-    if(data.error)throw new Error(data.error);
-    trumpItems=data;renderTrump();
-    document.getElementById('tr-count').textContent=trumpItems.length;
-    document.getElementById('tr-high').textContent=trumpItems.filter(i=>i.impact==='high').length;
-    document.getElementById('last-scan').textContent='Last scanned '+new Date().toLocaleTimeString();
-  }catch(err){
-    feed.innerHTML='<div class="empty">Scan failed: '+err.message+'</div>';
-  }
-  btn.disabled=false;btn.textContent='Scan latest announcements';
+const btn=document.getElementById('scan-btn');
+const feed=document.getElementById('trump-feed');
+btn.disabled=true;btn.textContent='Scanning...';
+feed.innerHTML='<div class="empty"><span class="spin">⟳</span> Scanning...</div>';
+try{
+const res=await fetch('/api/trump-scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({watchlist:tickers.map(t=>t.symbol).join(', ')})});
+const data=await res.json();
+if(data.error)throw new Error(data.error);
+trumpItems=data;renderTrump();
+document.getElementById('tr-count').textContent=trumpItems.length;
+document.getElementById('tr-high').textContent=trumpItems.filter(i=>i.impact==='high').length;
+document.getElementById('last-scan').textContent='Last scanned '+new Date().toLocaleTimeString();
+}catch(err){
+feed.innerHTML='<div class="empty">Scan failed: '+err.message+'</div>';
+}
+btn.disabled=false;btn.textContent='Scan latest announcements';
 }
 function renderTrump(){
-  const feed=document.getElementById('trump-feed'),ws=tickers.map(t=>t.symbol);
-  if(!trumpItems.length){feed.innerHTML='<div class="empty">No results.</div>';return;}
-  feed.innerHTML=trumpItems.map(item=>{
-    const ic=item.impact==='high'?'imp-high':item.impact==='medium'?'imp-med':item.impact==='low'?'imp-low':'imp-neutral';
-    const sectors=(item.sectors||[]).map(s=>`<span class="sector-tag">${s}</span>`).join('');
-    const tags=(item.tickers||[]).map(t=>{const iw=ws.includes(t);return`<span class="ticker-tag${iw?' in-watch':''}" onclick="addFromTrump('${t}')">${t}${iw?' ✓':' +'}</span>`;}).join('');
-    const sources=(item.sources||[]).map(s=>`<a href="${s.url}" target="_blank" style="font-size:10px;color:var(--blue);text-decoration:none;padding:2px 8px;border:1px solid var(--blue-border);border-radius:20px;background:var(--blue-bg);">${s.label} ↗</a>`).join('');
-    return`<div class="trump-card"><div class="tc-top"><div><div class="tc-title">${item.title||''}</div><div class="tc-date">${item.date||''}</div></div><span class="imp ${ic}">${item.impact||'neutral'}</span></div><div class="tc-summary">${item.summary||''}</div><div class="tc-reason">${item.reasoning||''}</div><div class="tags">${sectors}${tags}</div>${sources?`<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;">${sources}</div>`:''}</div>`;
-  }).join('');
+const feed=document.getElementById('trump-feed'),ws=tickers.map(t=>t.symbol);
+if(!trumpItems.length){feed.innerHTML='<div class="empty">No results.</div>';return;}
+feed.innerHTML=trumpItems.map(item=>{
+const ic=item.impact==='high'?'imp-high':item.impact==='medium'?'imp-med':item.impact==='low'?'imp-low':'imp-neutral';
+const sectors=(item.sectors||[]).map(s=>`<span class="sector-tag">${s}</span>`).join('');
+const tags=(item.tickers||[]).map(t=>{const iw=ws.includes(t);return`<span class="ticker-tag${iw?' in-watch':''}" onclick="addFromTrump('${t}')">${t}${iw?' ✓':' +'}</span>`;}).join('');
+const sources=(item.sources||[]).map(s=>`<a href="${s.url}" target="_blank" style="font-size:10px;color:var(--blue);text-decoration:none;padding:2px 8px;border:1px solid var(--blue-border);border-radius:20px;background:var(--blue-bg);">${s.label} ↗</a>`).join('');
+return`<div class="trump-card"><div class="tc-top"><div><div class="tc-title">${item.title||''}</div><div class="tc-date">${item.date||''}</div></div><span class="imp ${ic}">${item.impact||'neutral'}</span></div><div class="tc-summary">${item.summary||''}</div><div class="tc-reason">${item.reasoning||''}</div><div class="tags">${sectors}${tags}</div>${sources?`<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;">${sources}</div>`:''}</div>`;
+}).join('');
 }
 async function addFromTrump(sym){
-  if(tickers.find(t=>t.symbol===sym))return;
-  const idx=tickers.length;
-  tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',congress:'gray',options:'gray',technical:'gray',notes:'Flagged by Trump tracker.',_loading:true});
-  save();render();switchTab('signals',document.getElementById('tab-signals'));
-  await lookupTicker(sym,idx);
+if(tickers.find(t=>t.symbol===sym))return;
+const idx=tickers.length;
+tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',congress:'gray',options:'gray',technical:'gray',notes:'Flagged by Trump tracker.',_loading:true});
+save();render();switchTab('signals',document.getElementById('tab-signals'));
+await lookupTicker(sym,idx);
 }
+
+// ── SCREENER ──
+let scrResults=[];
+let scrSort={col:'marketCap',dir:'desc'};
+
+const PRESETS={
+  swing:{mcmin:1,mcmax:20,pmin:10,pmax:150,volmin:500000,sector:'',exchange:''},
+  small:{mcmin:0.1,mcmax:2,pmin:2,pmax:50,volmin:200000,sector:'',exchange:''},
+  energy:{mcmin:0,mcmax:'',pmin:0,pmax:'',volmin:100000,sector:'Energy',exchange:''},
+  tech:{mcmin:2,mcmax:50,pmin:15,pmax:300,volmin:300000,sector:'Technology',exchange:'NASDAQ'},
+  clear:{mcmin:'',mcmax:'',pmin:'',pmax:'',volmin:'',sector:'',exchange:''},
+};
+
+function applyPreset(key){
+  document.querySelectorAll('.scr-preset').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  const p=PRESETS[key];
+  document.getElementById('scr-mcmin').value=p.mcmin??'';
+  document.getElementById('scr-mcmax').value=p.mcmax??'';
+  document.getElementById('scr-pmin').value=p.pmin??'';
+  document.getElementById('scr-pmax').value=p.pmax??'';
+  document.getElementById('scr-volmin').value=p.volmin??'';
+  document.getElementById('scr-sector').value=p.sector??'';
+  document.getElementById('scr-exchange').value=p.exchange??'';
+}
+
+async function runScreener(){
+  const btn=document.getElementById('scr-run-btn');
+  const status=document.getElementById('scr-status');
+  const resultsEl=document.getElementById('scr-results');
+  const countEl=document.getElementById('scr-count');
+
+  const body={};
+  const mcmin=parseFloat(document.getElementById('scr-mcmin').value);
+  const mcmax=parseFloat(document.getElementById('scr-mcmax').value);
+  const pmin=parseFloat(document.getElementById('scr-pmin').value);
+  const pmax=parseFloat(document.getElementById('scr-pmax').value);
+  const volmin=parseFloat(document.getElementById('scr-volmin').value);
+  const sector=document.getElementById('scr-sector').value;
+  const exchange=document.getElementById('scr-exchange').value;
+
+  if(!isNaN(mcmin))body.marketCapMin=mcmin;
+  if(!isNaN(mcmax))body.marketCapMax=mcmax;
+  if(!isNaN(pmin))body.priceMin=pmin;
+  if(!isNaN(pmax))body.priceMax=pmax;
+  if(!isNaN(volmin))body.volumeMin=volmin;
+  if(sector)body.sector=sector;
+  if(exchange)body.exchange=exchange;
+
+  btn.disabled=true;
+  status.innerHTML='<span class="spin">⟳</span> Running...';
+  resultsEl.innerHTML='<div class="scr-empty"><span class="spin">⟳</span> Fetching results...</div>';
+  countEl.textContent='';
+
+  try{
+    const res=await fetch('/api/screener',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    scrResults=data;
+    status.textContent=`Done — ${scrResults.length} result${scrResults.length!==1?'s':''}`;
+    setTimeout(()=>status.textContent='',3000);
+    renderScreener();
+  }catch(err){
+    resultsEl.innerHTML=`<div class="scr-empty">Error: ${err.message}</div>`;
+    status.textContent='';
+  }
+  btn.disabled=false;
+}
+
+function renderScreener(){
+  const resultsEl=document.getElementById('scr-results');
+  const countEl=document.getElementById('scr-count');
+  const watchSyms=tickers.map(t=>t.symbol);
+
+  if(!scrResults.length){
+    resultsEl.innerHTML='<div class="scr-empty">No results match your filters.</div>';
+    countEl.textContent='0 results';
+    return;
+  }
+
+  // Sort
+  const sorted=[...scrResults].sort((a,b)=>{
+    let av=a[scrSort.col],bv=b[scrSort.col];
+    // raw numeric sort for price / change
+    if(scrSort.col==='price'||scrSort.col==='changePct'||scrSort.col==='beta'){
+      av=parseFloat(av)||0;bv=parseFloat(bv)||0;
+    } else if(scrSort.col==='marketCap'){
+      av=parseMktCapSort(av);bv=parseMktCapSort(bv);
+    } else if(scrSort.col==='volume'){
+      av=parseVolSort(av);bv=parseVolSort(bv);
+    }
+    if(av<bv)return scrSort.dir==='asc'?-1:1;
+    if(av>bv)return scrSort.dir==='asc'?1:-1;
+    return 0;
+  });
+
+  countEl.textContent=`${scrResults.length} result${scrResults.length!==1?'s':''}`;
+
+  const cols=[
+    {key:'symbol',label:'Ticker'},
+    {key:'exchange',label:'Exch'},
+    {key:'name',label:'Name'},
+    {key:'price',label:'Price'},
+    {key:'changePct',label:'Chg %'},
+    {key:'marketCap',label:'Mkt Cap'},
+    {key:'volume',label:'Volume'},
+    {key:'sector',label:'Sector'},
+    {key:'beta',label:'Beta'},
+    {key:'_action',label:''},
+  ];
+
+  const thHTML=cols.map(c=>{
+    if(c.key==='_action')return`<th></th>`;
+    const isSort=scrSort.col===c.key;
+    const dir=isSort?scrSort.dir:'';
+    return`<th class="sort-${dir}" onclick="setScrSort('${c.key}')">${c.label}<span class="sort-arrow"></span></th>`;
+  }).join('');
+
+  const rowsHTML=sorted.map(s=>{
+    const inWatch=watchSyms.includes(s.symbol);
+    const chg=parseFloat(s.changePct);
+    const chgClass=isNaN(chg)?'scr-chg-neu':chg>0?'scr-chg-pos':'scr-chg-neg';
+    const chgText=isNaN(chg)||s.changePct===null?'—':(chg>=0?'+':'')+chg+'%';
+    return`<tr onclick="scrRowClick('${s.symbol}')">
+      <td><span class="scr-sym">${s.symbol}</span></td>
+      <td><span class="scr-exch">${s.exchange}</span></td>
+      <td><span class="scr-name">${s.name}</span></td>
+      <td>$${s.price}</td>
+      <td><span class="${chgClass}">${chgText}</span></td>
+      <td>${s.marketCap}</td>
+      <td>${s.volume}</td>
+      <td style="font-size:11px;color:var(--muted);">${s.sector}</td>
+      <td style="font-family:'DM Mono',monospace;">${s.beta}</td>
+      <td><button class="scr-add-btn${inWatch?' added':''}" onclick="event.stopPropagation();scrAddToWatch('${s.symbol}',this)">${inWatch?'✓ Watching':'+ Watch'}</button></td>
+    </tr>`;
+  }).join('');
+
+  resultsEl.innerHTML=`<div class="scr-table-wrap"><table class="scr-table"><thead><tr>${thHTML}</tr></thead><tbody>${rowsHTML}</tbody></table></div>`;
+}
+
+function setScrSort(col){
+  if(scrSort.col===col){scrSort.dir=scrSort.dir==='asc'?'desc':'asc';}
+  else{scrSort.col=col;scrSort.dir='desc';}
+  renderScreener();
+}
+
+function parseMktCapSort(v){
+  if(!v||v==='—')return 0;
+  if(v.endsWith('T'))return parseFloat(v)*1e12;
+  if(v.endsWith('B'))return parseFloat(v)*1e9;
+  if(v.endsWith('M'))return parseFloat(v)*1e6;
+  return parseFloat(v)||0;
+}
+function parseVolSort(v){
+  if(!v||v==='—')return 0;
+  if(v.endsWith('M'))return parseFloat(v)*1e6;
+  if(v.endsWith('K'))return parseFloat(v)*1e3;
+  return parseFloat(v)||0;
+}
+
+function scrRowClick(sym){
+  window.open('https://finance.yahoo.com/quote/'+sym,'_blank');
+}
+
+async function scrAddToWatch(sym,btn){
+  if(tickers.find(t=>t.symbol===sym)){btn.textContent='✓ Watching';btn.classList.add('added');return;}
+  btn.textContent='Adding...';btn.disabled=true;
+  await addTicker(sym);
+  btn.textContent='✓ Watching';btn.classList.add('added');
+}
+
+// ── INIT ──
 render();
 clearJForm();
 renderJournal();
