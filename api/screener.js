@@ -73,20 +73,20 @@ export default async function handler(req, res) {
     });
   }
 
-  if (marketCapMin != null && marketCapMax != null) {
+if (marketCapMin != null && marketCapMax != null) {
     operands.push({
       operator: 'BTWN',
-      operands: ['marketCap', marketCapMin * 1e9, marketCapMax * 1e9],
+      operands: ['intraday_market_cap', marketCapMin * 1e9, marketCapMax * 1e9],
     });
   } else if (marketCapMin != null) {
     operands.push({
       operator: 'GT',
-      operands: ['marketCap', marketCapMin * 1e9],
+      operands: ['intraday_market_cap', marketCapMin * 1e9],
     });
   } else if (marketCapMax != null) {
     operands.push({
       operator: 'LT',
-      operands: ['marketCap', marketCapMax * 1e9],
+      operands: ['intraday_market_cap', marketCapMax * 1e9],
     });
   }
 
