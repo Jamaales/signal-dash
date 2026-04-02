@@ -730,14 +730,16 @@ async function runScreener(){
   const pmin=parseFloat(document.getElementById('scr-pmin').value);
   const pmax=parseFloat(document.getElementById('scr-pmax').value);
   const volmin=parseFloat(document.getElementById('scr-volmin').value);
+  const sector=document.getElementById('scr-sector').value;
+  const exchange=document.getElementById('scr-exchange').value;
 
-  if(!isNaN(mcmin) && mcmin >= 0)body.marketCapMin=mcmin;
-  if(!isNaN(mcmax) && mcmax > 0)body.marketCapMax=mcmax;
-  if(!isNaN(pmin) && pmin >= 0)body.priceMin=pmin;
-  if(!isNaN(pmax) && pmax > 0)body.priceMax=pmax;
-  if(!isNaN(volmin) && volmin > 0)body.volumeMin=volmin;
-  if(sector)body.sector=sector;
-  if(exchange)body.exchange=exchange;
+  if(!isNaN(mcmin) && mcmin >= 0) body.marketCapMin=mcmin;
+  if(!isNaN(mcmax) && mcmax > 0) body.marketCapMax=mcmax;
+  if(!isNaN(pmin) && pmin >= 0) body.priceMin=pmin;
+  if(!isNaN(pmax) && pmax > 0) body.priceMax=pmax;
+  if(!isNaN(volmin) && volmin > 0) body.volumeMin=volmin;
+  if(sector) body.sector=sector;
+  if(exchange) body.exchange=exchange;
 
   btn.disabled=true;
   status.innerHTML='<span class="spin">⟳</span> Running...';
