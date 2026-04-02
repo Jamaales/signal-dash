@@ -1,6 +1,5 @@
 // api/screener.js
 // Uses Yahoo Finance's query2 screener endpoint — no API key required.
-// Supports: price, market cap, sector, exchange, volume filters.
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,7 +7,7 @@ export default async function handler(req, res) {
   }
 
   const {
-    marketCapMin,  // billions
+    marketCapMin,
     marketCapMax,
     priceMin,
     priceMax,
@@ -18,7 +17,6 @@ export default async function handler(req, res) {
     limit = 50,
   } = req.body || {};
 
-  // Build Yahoo Finance screener filter operands
   const operands = [];
 
   if (priceMin != null || priceMax != null) {
@@ -42,24 +40,10 @@ export default async function handler(req, res) {
     });
   }
 
-  // Sector map — Yahoo uses slightly different names
-  const SECTOR_MAP = {
-    'Technology': 'Technology',
-    'Healthcare': 'Healthcare',
-    'Energy': 'Energy',
-    'Financial Services': 'Financial Services',
-    'Consumer Cyclical': 'Consumer Cyclical',
-    'Consumer Defensive': 'Consumer Defensive',
-    'Industrials': 'Industrials',
-    'Basic Materials': 'Basic Materials',
-    'Real Estate': 'Real Estate',
-    'Communication Services': 'Communication Services',
-    'Utilities': 'Utilities',
-  };
-  if (sector && SECTOR_MAP[sector]) {
+  if (sector) {
     operands.push({
       operator: 'EQ',
-      operands: ['sector', SECTOR_MAP[sector]],
+      operands: ['sector', sector],
     });
   }
 
@@ -70,7 +54,6 @@ export default async function handler(req, res) {
     });
   }
 
-  // Always filter to US equities only
   operands.push({ operator: 'EQ', operands: ['region', 'us'] });
   operands.push({ operator: 'EQ', operands: ['quoteType', 'EQUITY'] });
 
@@ -88,10 +71,8 @@ export default async function handler(req, res) {
     userIdType: 'guid',
   };
 
-  const url = 'https://query2.finance.yahoo.com/v1/finance/screener';
-
   try {
-    const response = await fetch(url, {
+    const response = await fetch('https://query2.finance.yahoo.com/v1/finance/screener', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -103,24 +84,24 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const text = await response.text();
-      throw new Error(`Yahoo Finance error ${response.status}: ${text.slice(0, 200)}`);
+      throw new Error(`Yahoo error ${response.status}: ${text.slice(0, 200)}`);
     }
 
     const data = await response.json();
     const quotes = data?.finance?.result?.[0]?.quotes ?? [];
 
     const results = quotes.map(q => ({
-      symbol:     q.symbol,
-      name:       q.longName || q.shortName || '—',
-      price:      q.regularMarketPrice != null ? q.regularMarketPrice.toFixed(2) : '—',
-      marketCap:  q.marketCap != null ? formatMktCap(q.marketCap) : '—',
-      volume:     q.regularMarketVolume != null ? formatVol(q.regularMarketVolume) : '—',
-      sector:     q.sector || '—',
-      exchange:   q.fullExchangeName || q.exchange || '—',
-      beta:       q.beta != null ? q.beta.toFixed(2) : '—',
-      changePct:  q.regularMarketChangePercent != null
-                    ? q.regularMarketChangePercent.toFixed(2)
-                    : null,
+      symbol:    q.symbol,
+      name:      q.longName || q.shortName || '—',
+      price:     q.regularMarketPrice != null ? q.regularMarketPrice.toFixed(2) : '—',
+      marketCap: q.marketCap != null ? formatMktCap(q.marketCap) : '—',
+      volume:    q.regularMarketVolume != null ? formatVol(q.regularMarketVolume) : '—',
+      sector:    q.sector || '—',
+      exchange:  q.fullExchangeName || q.exchange || '—',
+      beta:      q.beta != null ? q.beta.toFixed(2) : '—',
+      changePct: q.regularMarketChangePercent != null
+                   ? q.regularMarketChangePercent.toFixed(2)
+                   : null,
     }));
 
     res.setHeader('Cache-Control', 'no-store');
