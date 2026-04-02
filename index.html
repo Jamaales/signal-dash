@@ -733,13 +733,13 @@ async function runScreener(){
   const sector=document.getElementById('scr-sector').value;
   const exchange=document.getElementById('scr-exchange').value;
 
-  if(!isNaN(mcmin) && mcmin >= 0) body.marketCapMin=mcmin;
-  if(!isNaN(mcmax) && mcmax > 0) body.marketCapMax=mcmax;
+  // Send broad filters to API, enforce tight ones client-side
   if(!isNaN(pmin) && pmin >= 0) body.priceMin=pmin;
   if(!isNaN(pmax) && pmax > 0) body.priceMax=pmax;
   if(!isNaN(volmin) && volmin > 0) body.volumeMin=volmin;
   if(sector) body.sector=sector;
   if(exchange) body.exchange=exchange;
+  body.limit=200; // fetch more so client-side filter has enough to work with
 
   btn.disabled=true;
   status.innerHTML='<span class="spin">⟳</span> Running...';
@@ -750,7 +750,15 @@ async function runScreener(){
     const res=await fetch('/api/screener',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const data=await res.json();
     if(data.error)throw new Error(data.error);
-    scrResults=data;
+
+    // Client-side market cap filtering (Yahoo ignores this server-side)
+    scrResults=data.filter(s=>{
+      const cap=parseMktCapSort(s.marketCap); // in raw dollars
+      if(!isNaN(mcmin) && mcmin>=0 && cap < mcmin*1e9) return false;
+      if(!isNaN(mcmax) && mcmax>0 && cap > mcmax*1e9) return false;
+      return true;
+    });
+
     status.textContent=`Done — ${scrResults.length} result${scrResults.length!==1?'s':''}`;
     setTimeout(()=>status.textContent='',3000);
     renderScreener();
