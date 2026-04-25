@@ -151,45 +151,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .filt-btn{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
 .filt-btn.active{background:var(--surface2);color:var(--text);border-color:var(--purple);}
 
-/* ── SCREENER STYLES ── */
-.scr-filters{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;}
-.scr-filters-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.scr-filters-row2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px;}
-.scr-filter-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
-.scr-run-btn{font-size:12px;font-weight:500;padding:7px 18px;border:1px solid var(--green-border);border-radius:7px;background:var(--green-bg);color:var(--green);cursor:pointer;transition:all .15s;}
-.scr-run-btn:hover{background:#0d2a1c;}
-.scr-run-btn:disabled{opacity:.4;cursor:not-allowed;}
-.scr-status{font-size:11px;color:var(--hint);font-family:'DM Mono',monospace;}
-.scr-results-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.scr-count{font-size:10px;color:var(--hint);font-family:'DM Mono',monospace;}
-.scr-table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border);}
-.scr-table{width:100%;border-collapse:collapse;font-size:12px;}
-.scr-table thead tr{border-bottom:1px solid var(--border);background:var(--surface2);}
-.scr-table th{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:8px 12px;text-align:left;white-space:nowrap;cursor:pointer;user-select:none;}
-.scr-table th:hover{color:var(--text);}
-.scr-table th .sort-arrow{margin-left:4px;opacity:.4;font-size:9px;}
-.scr-table th.sort-asc .sort-arrow::after{content:'▲';opacity:1;}
-.scr-table th.sort-desc .sort-arrow::after{content:'▼';opacity:1;}
-.scr-table th .sort-arrow::after{content:'⬍';}
-.scr-table tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer;}
-.scr-table tbody tr:last-child{border-bottom:none;}
-.scr-table tbody tr:hover{background:var(--surface2);}
-.scr-table td{padding:9px 12px;white-space:nowrap;}
-.scr-sym{font-family:'DM Mono',monospace;font-weight:500;font-size:13px;}
-.scr-name{color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;}
-.scr-chg-pos{color:var(--green);font-family:'DM Mono',monospace;}
-.scr-chg-neg{color:var(--red);font-family:'DM Mono',monospace;}
-.scr-chg-neu{color:var(--hint);font-family:'DM Mono',monospace;}
-.scr-exch{font-size:10px;padding:2px 7px;border-radius:20px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
-.scr-add-btn{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border);cursor:pointer;white-space:nowrap;transition:all .15s;}
-.scr-add-btn:hover{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border);}
-.scr-add-btn.added{background:var(--green-bg);color:var(--green);border-color:var(--green-border);cursor:default;}
-.scr-preset-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
-.scr-preset{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
-.scr-preset:hover{background:var(--surface2);color:var(--text);}
-.scr-preset.active{background:var(--purple-bg);color:var(--purple);border-color:var(--purple-border);}
-.scr-empty{text-align:center;padding:3rem;color:var(--hint);font-size:13px;}
-
 @media(max-width:600px){
 .topbar{padding:10px 14px;gap:8px;}
 .logo{font-size:12px;}
@@ -224,9 +185,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .form-footer{gap:6px;}
 .trump-card{padding:11px 12px;}
 .trade-card{padding:10px 12px;}
-.scr-filters-grid{grid-template-columns:1fr 1fr;}
-.scr-filters-row2{grid-template-columns:1fr 1fr;}
-.scr-table td:nth-child(3),.scr-table th:nth-child(3){display:none;} /* hide name on mobile */
 }
 </style>
 </head>
@@ -236,7 +194,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 <div class="logo">signal<span>.</span>dash</div>
 <div class="tabs">
 <button class="tab active" id="tab-signals" onclick="switchTab('signals',this)">Signals</button>
-<button class="tab" id="tab-screener" onclick="switchTab('screener',this)">Screener</button>
 <button class="tab" id="tab-trump" onclick="switchTab('trump',this)">Trump tracker</button>
 <button class="tab" id="tab-journal" onclick="switchTab('journal',this)">Journal</button>
 </div>
@@ -290,93 +247,6 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 <input type="text" id="t-input" placeholder="Type ticker + Enter to auto-lookup..." maxlength="10" onkeydown="if(event.key==='Enter')addTicker()"/>
 <button id="lookup-btn" onclick="addTicker()">Lookup</button>
 </div>
-</div>
-
-<!-- ── SCREENER ── -->
-<div id="page-screener" class="page">
-  <div class="scr-filters">
-    <div class="form-title" style="margin-bottom:10px;">Filter criteria</div>
-
-    <!-- Presets -->
-    <div class="scr-preset-row">
-      <span style="font-size:10px;color:var(--hint);line-height:24px;margin-right:4px;">Presets:</span>
-      <button class="scr-preset" onclick="applyPreset('swing')">Swing candidates</button>
-      <button class="scr-preset" onclick="applyPreset('small')">Small caps</button>
-      <button class="scr-preset" onclick="applyPreset('energy')">Energy sector</button>
-      <button class="scr-preset" onclick="applyPreset('tech')">Tech mid-cap</button>
-      <button class="scr-preset" onclick="applyPreset('clear')">Clear all</button>
-    </div>
-
-    <!-- Row 1: Market Cap + Price -->
-    <div class="scr-filters-grid">
-      <div class="ff">
-        <label>Market cap min ($B)</label>
-        <input type="number" id="scr-mcmin" placeholder="e.g. 0.5" step="0.1" min="0"/>
-      </div>
-      <div class="ff">
-        <label>Market cap max ($B)</label>
-        <input type="number" id="scr-mcmax" placeholder="e.g. 10" step="0.1" min="0"/>
-      </div>
-      <div class="ff">
-        <label>Price min ($)</label>
-        <input type="number" id="scr-pmin" placeholder="e.g. 5" step="1" min="0"/>
-      </div>
-    </div>
-
-    <!-- Row 2: Price max + Volume + Sector + Exchange -->
-    <div class="scr-filters-row2">
-      <div class="ff">
-        <label>Price max ($)</label>
-        <input type="number" id="scr-pmax" placeholder="e.g. 200" step="1" min="0"/>
-      </div>
-      <div class="ff">
-        <label>Avg volume min</label>
-        <input type="number" id="scr-volmin" placeholder="e.g. 500000" step="100000" min="0"/>
-      </div>
-      <div class="ff">
-        <label>Sector</label>
-        <select id="scr-sector">
-          <option value="">Any sector</option>
-          <option>Technology</option>
-          <option>Healthcare</option>
-          <option>Energy</option>
-          <option>Financial Services</option>
-          <option>Consumer Cyclical</option>
-          <option>Consumer Defensive</option>
-          <option>Industrials</option>
-          <option>Basic Materials</option>
-          <option>Real Estate</option>
-          <option>Communication Services</option>
-          <option>Utilities</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="scr-filter-footer">
-      <div class="ff" style="flex-direction:row;align-items:center;gap:10px;">
-        <label style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;">Exchange</label>
-        <select id="scr-exchange" style="font-size:12px;padding:6px 9px;border:1px solid var(--border);border-radius:6px;background:var(--surface2);color:var(--text);outline:none;font-family:'DM Sans',sans-serif;min-width:120px;">
-          <option value="">Any</option>
-          <option value="NYSE">NYSE</option>
-          <option value="NASDAQ">NASDAQ</option>
-          <option value="AMEX">AMEX</option>
-        </select>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span class="scr-status" id="scr-status"></span>
-        <button class="scr-run-btn" id="scr-run-btn" onclick="runScreener()">Run screen</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Results -->
-  <div class="scr-results-head">
-    <div class="section-head" style="margin-bottom:0;">Results</div>
-    <div class="scr-count" id="scr-count"></div>
-  </div>
-  <div id="scr-results">
-    <div class="scr-empty">Set filters above and run the screen.</div>
-  </div>
 </div>
 
 <!-- ── TRUMP TRACKER ── -->
@@ -691,184 +561,6 @@ const idx=tickers.length;
 tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',congress:'gray',options:'gray',technical:'gray',notes:'Flagged by Trump tracker.',_loading:true});
 save();render();switchTab('signals',document.getElementById('tab-signals'));
 await lookupTicker(sym,idx);
-}
-
-// ── SCREENER ──
-let scrResults=[];
-let scrSort={col:'marketCap',dir:'desc'};
-
-const PRESETS={
-  swing:{mcmin:1,mcmax:20,pmin:10,pmax:150,volmin:500000,sector:'',exchange:''},
-  small:{mcmin:0.1,mcmax:2,pmin:2,pmax:50,volmin:200000,sector:'',exchange:''},
-  energy:{mcmin:0,mcmax:'',pmin:0,pmax:'',volmin:100000,sector:'Energy',exchange:''},
-  tech:{mcmin:2,mcmax:50,pmin:15,pmax:300,volmin:300000,sector:'Technology',exchange:'NASDAQ'},
-  clear:{mcmin:'',mcmax:'',pmin:'',pmax:'',volmin:'',sector:'',exchange:''},
-};
-
-function applyPreset(key){
-  document.querySelectorAll('.scr-preset').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-  const p=PRESETS[key];
-  document.getElementById('scr-mcmin').value=p.mcmin??'';
-  document.getElementById('scr-mcmax').value=p.mcmax??'';
-  document.getElementById('scr-pmin').value=p.pmin??'';
-  document.getElementById('scr-pmax').value=p.pmax??'';
-  document.getElementById('scr-volmin').value=p.volmin??'';
-  document.getElementById('scr-sector').value=p.sector??'';
-  document.getElementById('scr-exchange').value=p.exchange??'';
-}
-
-async function runScreener(){
-  const btn=document.getElementById('scr-run-btn');
-  const status=document.getElementById('scr-status');
-  const resultsEl=document.getElementById('scr-results');
-  const countEl=document.getElementById('scr-count');
-
-  const body={};
-  const mcmin=parseFloat(document.getElementById('scr-mcmin').value);
-  const mcmax=parseFloat(document.getElementById('scr-mcmax').value);
-  const pmin=parseFloat(document.getElementById('scr-pmin').value);
-  const pmax=parseFloat(document.getElementById('scr-pmax').value);
-  const volmin=parseFloat(document.getElementById('scr-volmin').value);
-  const sector=document.getElementById('scr-sector').value;
-  const exchange=document.getElementById('scr-exchange').value;
-
-  // Send broad filters to API, enforce tight ones client-side
-  if(!isNaN(pmin) && pmin >= 0) body.priceMin=pmin;
-  if(!isNaN(pmax) && pmax > 0) body.priceMax=pmax;
-  if(!isNaN(volmin) && volmin > 0) body.volumeMin=volmin;
-  if(sector) body.sector=sector;
-  if(exchange) body.exchange=exchange;
-  body.limit=200; // fetch more so client-side filter has enough to work with
-
-  btn.disabled=true;
-  status.innerHTML='<span class="spin">⟳</span> Running...';
-  resultsEl.innerHTML='<div class="scr-empty"><span class="spin">⟳</span> Fetching results...</div>';
-  countEl.textContent='';
-
-  try{
-    const res=await fetch('/api/screener',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    const data=await res.json();
-    if(data.error)throw new Error(data.error);
-
-    // Client-side market cap filtering (Yahoo ignores this server-side)
-    scrResults=data.filter(s=>{
-      const cap=parseMktCapSort(s.marketCap); // in raw dollars
-      if(!isNaN(mcmin) && mcmin>=0 && cap < mcmin*1e9) return false;
-      if(!isNaN(mcmax) && mcmax>0 && cap > mcmax*1e9) return false;
-      return true;
-    });
-
-    status.textContent=`Done — ${scrResults.length} result${scrResults.length!==1?'s':''}`;
-    setTimeout(()=>status.textContent='',3000);
-    renderScreener();
-  }catch(err){
-    resultsEl.innerHTML=`<div class="scr-empty">Error: ${err.message}</div>`;
-    status.textContent='';
-  }
-  btn.disabled=false;
-}
-
-function renderScreener(){
-  const resultsEl=document.getElementById('scr-results');
-  const countEl=document.getElementById('scr-count');
-  const watchSyms=tickers.map(t=>t.symbol);
-
-  if(!scrResults.length){
-    resultsEl.innerHTML='<div class="scr-empty">No results match your filters.</div>';
-    countEl.textContent='0 results';
-    return;
-  }
-
-  // Sort
-  const sorted=[...scrResults].sort((a,b)=>{
-    let av=a[scrSort.col],bv=b[scrSort.col];
-    // raw numeric sort for price / change
-    if(scrSort.col==='price'||scrSort.col==='changePct'||scrSort.col==='beta'){
-      av=parseFloat(av)||0;bv=parseFloat(bv)||0;
-    } else if(scrSort.col==='marketCap'){
-      av=parseMktCapSort(av);bv=parseMktCapSort(bv);
-    } else if(scrSort.col==='volume'){
-      av=parseVolSort(av);bv=parseVolSort(bv);
-    }
-    if(av<bv)return scrSort.dir==='asc'?-1:1;
-    if(av>bv)return scrSort.dir==='asc'?1:-1;
-    return 0;
-  });
-
-  countEl.textContent=`${scrResults.length} result${scrResults.length!==1?'s':''}`;
-
-  const cols=[
-    {key:'symbol',label:'Ticker'},
-    {key:'exchange',label:'Exch'},
-    {key:'name',label:'Name'},
-    {key:'price',label:'Price'},
-    {key:'changePct',label:'Chg %'},
-    {key:'marketCap',label:'Mkt Cap'},
-    {key:'volume',label:'Volume'},
-    {key:'sector',label:'Sector'},
-    {key:'beta',label:'Beta'},
-    {key:'_action',label:''},
-  ];
-
-  const thHTML=cols.map(c=>{
-    if(c.key==='_action')return`<th></th>`;
-    const isSort=scrSort.col===c.key;
-    const dir=isSort?scrSort.dir:'';
-    return`<th class="sort-${dir}" onclick="setScrSort('${c.key}')">${c.label}<span class="sort-arrow"></span></th>`;
-  }).join('');
-
-  const rowsHTML=sorted.map(s=>{
-    const inWatch=watchSyms.includes(s.symbol);
-    const chg=parseFloat(s.changePct);
-    const chgClass=isNaN(chg)?'scr-chg-neu':chg>0?'scr-chg-pos':'scr-chg-neg';
-    const chgText=isNaN(chg)||s.changePct===null?'—':(chg>=0?'+':'')+chg+'%';
-    return`<tr onclick="scrRowClick('${s.symbol}')">
-      <td><span class="scr-sym">${s.symbol}</span></td>
-      <td><span class="scr-exch">${s.exchange}</span></td>
-      <td><span class="scr-name">${s.name}</span></td>
-      <td>$${s.price}</td>
-      <td><span class="${chgClass}">${chgText}</span></td>
-      <td>${s.marketCap}</td>
-      <td>${s.volume}</td>
-      <td style="font-size:11px;color:var(--muted);">${s.sector}</td>
-      <td style="font-family:'DM Mono',monospace;">${s.beta}</td>
-      <td><button class="scr-add-btn${inWatch?' added':''}" onclick="event.stopPropagation();scrAddToWatch('${s.symbol}',this)">${inWatch?'✓ Watching':'+ Watch'}</button></td>
-    </tr>`;
-  }).join('');
-
-  resultsEl.innerHTML=`<div class="scr-table-wrap"><table class="scr-table"><thead><tr>${thHTML}</tr></thead><tbody>${rowsHTML}</tbody></table></div>`;
-}
-
-function setScrSort(col){
-  if(scrSort.col===col){scrSort.dir=scrSort.dir==='asc'?'desc':'asc';}
-  else{scrSort.col=col;scrSort.dir='desc';}
-  renderScreener();
-}
-
-function parseMktCapSort(v){
-  if(!v||v==='—')return 0;
-  if(v.endsWith('T'))return parseFloat(v)*1e12;
-  if(v.endsWith('B'))return parseFloat(v)*1e9;
-  if(v.endsWith('M'))return parseFloat(v)*1e6;
-  return parseFloat(v)||0;
-}
-function parseVolSort(v){
-  if(!v||v==='—')return 0;
-  if(v.endsWith('M'))return parseFloat(v)*1e6;
-  if(v.endsWith('K'))return parseFloat(v)*1e3;
-  return parseFloat(v)||0;
-}
-
-function scrRowClick(sym){
-  window.open('https://finance.yahoo.com/quote/'+sym,'_blank');
-}
-
-async function scrAddToWatch(sym,btn){
-  if(tickers.find(t=>t.symbol===sym)){btn.textContent='✓ Watching';btn.classList.add('added');return;}
-  btn.textContent='Adding...';btn.disabled=true;
-  await addTicker(sym);
-  btn.textContent='✓ Watching';btn.classList.add('added');
 }
 
 // ── INIT ──
