@@ -36,12 +36,13 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .metric-sub{font-size:10px;color:var(--hint);margin-top:3px;}
 .section-head{font-size:10px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
 .watchlist{display:flex;flex-direction:column;gap:6px;}
-.ticker-row{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .15s;}
+.ticker-row{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:11px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .15s;flex-wrap:wrap;}
 .ticker-row:hover{border-color:#3d4047;}
 .ticker-row.selected{border-color:var(--blue);background:var(--blue-bg);}
 .ticker-row.loading{opacity:.5;pointer-events:none;}
 .t-symbol{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;min-width:52px;}
 .t-name{font-size:11px;color:var(--muted);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.t-note-preview{font-size:10px;color:var(--hint);width:100%;padding-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-style:italic;border-top:1px solid var(--border);margin-top:2px;}
 .signals{display:flex;gap:4px;}
 .sig{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;font-family:'DM Mono',monospace;}
 .sig-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
@@ -67,10 +68,12 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .detail-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
 .detail-sym{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;}
 .detail-actions{display:flex;gap:6px;flex-wrap:wrap;}
-.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.detail-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px;}
 .df{background:var(--surface2);border-radius:6px;padding:8px 10px;}
 .df-label{font-size:10px;color:var(--muted);margin-bottom:3px;}
 .df-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;}
+.df-input{font-family:'DM Mono',monospace;font-size:12px;background:transparent;border:none;outline:none;color:var(--text);width:100%;padding:0;margin-top:1px;}
+.df-input::placeholder{color:var(--hint);font-weight:400;}
 .sig-toggles{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
 .stog{font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:20px;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
 .stog.g{background:var(--green-bg);color:var(--green);border-color:var(--green-border);}
@@ -223,6 +226,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 <div class="df"><div class="df-label">Price</div><div class="df-val" id="d-price">—</div></div>
 <div class="df"><div class="df-label">RSI</div><div class="df-val" id="d-rsi">—</div></div>
 <div class="df"><div class="df-label">Target</div><div class="df-val" id="d-target">—</div></div>
+<div class="df"><div class="df-label">Stop Loss</div><input class="df-input" id="d-stop" placeholder="e.g. 34.00" oninput="saveField('stop',this.value)"/></div>
+<div class="df"><div class="df-label">Earnings</div><input class="df-input" id="d-earnings" placeholder="e.g. May 7" oninput="saveField('earnings',this.value)"/></div>
 </div>
 <div class="small-label" style="margin-bottom:8px;">Signals — click to cycle</div>
 <div class="sig-toggles">
@@ -406,7 +411,7 @@ function deleteTrade(i){trades.splice(i,1);saveJournal();renderJournal();}
 
 // ── SIGNALS / WATCHLIST ──
 let tickers=JSON.parse(localStorage.getItem('sd_v2')||'null')||[
-{symbol:'LGIH',name:'LGI Homes',price:'37.45',rsi:'38',target:'75.90',congress:'green',options:'gray',technical:'amber',notes:'Tim Moore buying $250K+ in March. Spring sales event through Apr 26. RSI climbing out of oversold.'}
+{symbol:'LGIH',name:'LGI Homes',price:'37.45',rsi:'38',target:'75.90',stop:'',earnings:'',congress:'green',options:'gray',technical:'amber',notes:'Tim Moore buying $250K+ in March. Spring sales event through Apr 26. RSI climbing out of oversold.'}
 ];
 let selected=null,trumpItems=[];
 function save(){localStorage.setItem('sd_v2',JSON.stringify(tickers));}
@@ -440,6 +445,7 @@ const wl=document.getElementById('watchlist');
 if(!tickers.length){wl.innerHTML='<div class="empty">No tickers yet.</div>';updateMetrics();return;}
 wl.innerHTML=tickers.map((t,i)=>{
 const sm=scoreMeta(scoreOf(t));
+const notePreview=t.notes?t.notes.split('\n')[0].trim():'';
 return`<div class="ticker-row${selected===i?' selected':''}${t._loading?' loading':''}" onclick="openDetail(${i})">
 <div class="t-symbol">${t.symbol}</div>
 <div class="t-name">${t._loading?'looking up...':t.name||'—'}</div>
@@ -450,6 +456,7 @@ return`<div class="ticker-row${selected===i?' selected':''}${t._loading?' loadin
 </div>
 <span class="score ${sm.c}">${sm.t}</span>
 <button class="rm-btn" onclick="event.stopPropagation();removeTicker(${i})">✕</button>
+${notePreview?`<div class="t-note-preview">${notePreview}</div>`:''}
 </div>`;
 }).join('');
 updateMetrics();
@@ -459,7 +466,7 @@ const inp=document.getElementById('t-input');
 if(!sym)sym=inp.value.trim().toUpperCase();
 if(!sym||tickers.find(t=>t.symbol===sym)){if(inp)inp.value='';return;}
 const idx=tickers.length;
-tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',congress:'gray',options:'gray',technical:'gray',notes:'',_loading:true});
+tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',stop:'',earnings:'',congress:'gray',options:'gray',technical:'gray',notes:'',_loading:true});
 if(inp)inp.value='';render();
 await lookupTicker(sym,idx);
 }
@@ -472,7 +479,9 @@ try{
 const res=await fetch('/api/lookup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symbol:sym})});
 const data=await res.json();
 if(data.error)throw new Error(data.error);
-tickers[idx]={...data,_loading:false};
+// preserve manually entered fields when refreshing
+const preserved={stop:tickers[idx].stop||'',earnings:tickers[idx].earnings||'',notes:tickers[idx].notes||''};
+tickers[idx]={...data,...preserved,_loading:false};
 save();render();openDetail(idx);
 st.textContent='';
 }catch(err){
@@ -501,6 +510,8 @@ document.getElementById('d-sym').textContent=t.symbol;
 document.getElementById('d-price').textContent=t.price||'—';
 document.getElementById('d-rsi').textContent=t.rsi||'—';
 document.getElementById('d-target').textContent=t.target?'$'+t.target:'—';
+document.getElementById('d-stop').value=t.stop||'';
+document.getElementById('d-earnings').value=t.earnings||'';
 document.getElementById('d-notes').value=t.notes||'';
 document.getElementById('btn-fv').onclick=()=>window.open('https://finviz.com/quote.ashx?t='+t.symbol,'_blank');
 document.getElementById('btn-bc').onclick=()=>window.open('https://www.barchart.com/stocks/quotes/'+t.symbol+'/options','_blank');
@@ -523,7 +534,8 @@ const cycle={gray:'amber',amber:'green',green:'red',red:'gray'};
 tickers[selected][key]=cycle[tickers[selected][key]]||'gray';
 updateToggles();save();render();
 }
-function saveNotes(){if(selected!==null){tickers[selected].notes=document.getElementById('d-notes').value;save();}}
+function saveNotes(){if(selected!==null){tickers[selected].notes=document.getElementById('d-notes').value;save();render();}}
+function saveField(field,val){if(selected!==null){tickers[selected][field]=val;save();}}
 
 // ── TRUMP TRACKER ──
 async function runScan(){
@@ -558,7 +570,7 @@ return`<div class="trump-card"><div class="tc-top"><div><div class="tc-title">${
 async function addFromTrump(sym){
 if(tickers.find(t=>t.symbol===sym))return;
 const idx=tickers.length;
-tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',congress:'gray',options:'gray',technical:'gray',notes:'Flagged by Trump tracker.',_loading:true});
+tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',stop:'',earnings:'',congress:'gray',options:'gray',technical:'gray',notes:'Flagged by Trump tracker.',_loading:true});
 save();render();switchTab('signals',document.getElementById('tab-signals'));
 await lookupTicker(sym,idx);
 }
