@@ -15,6 +15,7 @@
 --red:#f87171;--red-bg:#220d0d;--red-border:#4a1a1a;
 --blue:#60a5fa;--blue-bg:#0d1a2e;--blue-border:#1a3a5c;
 --purple:#a78bfa;--purple-bg:#150d2e;--purple-border:#2d1a5c;
+--cyan:#22d3ee;--cyan-bg:#041a1f;--cyan-border:#0e4a56;
 }
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;min-height:100vh;}
 .app{display:flex;flex-direction:column;height:100vh;overflow:hidden;}
@@ -154,6 +155,107 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .filt-btn{font-size:11px;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;}
 .filt-btn.active{background:var(--surface2);color:var(--text);border-color:var(--purple);}
 
+/* ── FLOW INTELLIGENCE TAB ── */
+.flow-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+.flow-metric{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
+.flow-metric.cyan{border-color:var(--cyan-border);}
+.flow-metric .metric-value{font-size:20px;}
+
+.flow-scan-box{background:var(--surface);border:1px solid var(--cyan-border);border-radius:10px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.flow-scan-left{flex:1;}
+.flow-scan-left h3{font-size:13px;font-weight:500;margin-bottom:4px;color:var(--cyan);}
+.flow-scan-left p{font-size:11px;color:var(--muted);line-height:1.6;}
+.flow-scan-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.flow-btn{font-size:12px;font-weight:500;padding:8px 18px;border:1px solid var(--cyan-border);border-radius:8px;background:var(--cyan-bg);color:var(--cyan);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.flow-btn:hover{background:#062025;}
+.flow-btn:disabled{opacity:.4;cursor:not-allowed;}
+.flow-btn.secondary{border-color:var(--border);background:var(--surface2);color:var(--muted);}
+.flow-btn.secondary:hover{border-color:#3d4047;background:var(--surface);color:var(--text);}
+
+.flow-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
+.flow-panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.flow-panel-head{padding:10px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.flow-panel-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+.flow-panel-title span{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+.flow-panel-title .dot-dp{background:var(--cyan);}
+.flow-panel-title .dot-opt{background:var(--purple);}
+.flow-panel-title .dot-cong{background:var(--green);}
+.flow-panel-body{padding:10px;display:flex;flex-direction:column;gap:6px;min-height:180px;}
+
+.dp-card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 11px;}
+.dp-card.high{border-color:var(--cyan-border);background:var(--cyan-bg);}
+.dp-ticker{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;margin-bottom:2px;}
+.dp-ticker.high{color:var(--cyan);}
+.dp-meta{font-size:10px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+.dp-size{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;}
+.dp-size.large{color:var(--cyan);}
+.dp-size.medium{color:var(--amber);}
+.dp-size.small{color:var(--muted);}
+.dp-badge{font-size:9px;padding:1px 6px;border-radius:10px;}
+.dp-bull{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.dp-bear{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.dp-neutral{background:var(--surface2);color:var(--hint);border:1px solid var(--border);}
+
+.opt-card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 11px;}
+.opt-card.sweep{border-color:var(--purple-border);}
+.opt-ticker{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;margin-bottom:2px;}
+.opt-type{font-size:9px;padding:1px 6px;border-radius:10px;font-family:'DM Mono',monospace;}
+.opt-call{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.opt-put{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.opt-meta{font-size:10px;color:var(--muted);margin-top:3px;}
+.opt-sweep-badge{font-size:9px;padding:1px 6px;border-radius:10px;background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-border);margin-left:4px;}
+
+.cong-card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:9px 11px;}
+.cong-name{font-size:11px;font-weight:500;margin-bottom:1px;}
+.cong-ticker{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--green);}
+.cong-meta{font-size:10px;color:var(--muted);margin-top:3px;}
+.cong-amount{font-family:'DM Mono',monospace;font-size:11px;color:var(--green);}
+
+/* Confluence / AI interpretation */
+.confluence-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;}
+.confluence-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.confluence-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);}
+.confluence-badge{font-size:10px;padding:2px 9px;border-radius:20px;font-family:'DM Mono',monospace;}
+.conf-high{background:var(--cyan-bg);color:var(--cyan);border:1px solid var(--cyan-border);}
+.conf-med{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-border);}
+.conf-low{background:var(--surface2);color:var(--hint);border:1px solid var(--border);}
+
+.confluence-signals{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.csig{font-size:10px;padding:3px 10px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+.csig-on{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.csig-off{background:var(--surface2);color:var(--hint);border:1px solid var(--border);}
+
+.ai-interpretation{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;}
+.ai-label{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);margin-bottom:6px;}
+.ai-text{font-size:12px;color:var(--muted);line-height:1.7;}
+
+.kalshi-suggestions{display:flex;flex-direction:column;gap:6px;}
+.kalshi-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
+.kalshi-card.strong{border-color:var(--cyan-border);}
+.kalshi-contract{flex:1;}
+.kalshi-contract-name{font-size:12px;font-weight:500;margin-bottom:2px;}
+.kalshi-contract-meta{font-size:10px;color:var(--muted);}
+.kalshi-odds{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--cyan);}
+.kalshi-edge{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);white-space:nowrap;}
+
+.flow-empty{text-align:center;padding:24px;color:var(--hint);font-size:12px;line-height:1.6;}
+.flow-empty .flow-empty-icon{font-size:24px;margin-bottom:8px;opacity:.4;}
+
+/* API key prompt */
+.api-prompt{background:var(--surface);border:1px solid var(--cyan-border);border-radius:10px;padding:16px;margin-bottom:16px;}
+.api-prompt-title{font-size:12px;font-weight:500;color:var(--cyan);margin-bottom:8px;}
+.api-prompt-desc{font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6;}
+.api-input-row{display:flex;gap:8px;}
+.api-input-row input{flex:1;font-size:12px;padding:7px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface2);color:var(--text);outline:none;font-family:'DM Mono',monospace;}
+.api-input-row input:focus{border-color:var(--cyan-border);}
+.api-input-row input::placeholder{color:var(--hint);}
+
+.pulse{animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+
+.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);margin-right:5px;animation:pulse 2s infinite;}
+.live-label{font-size:10px;color:var(--green);font-family:'DM Mono',monospace;display:flex;align-items:center;}
+
 @media(max-width:600px){
 .topbar{padding:10px 14px;gap:8px;}
 .logo{font-size:12px;}
@@ -166,6 +268,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .metric-label{font-size:9px;}
 .jmetrics{grid-template-columns:repeat(2,minmax(0,1fr));}
 .trump-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+.flow-metrics{grid-template-columns:repeat(2,minmax(0,1fr));}
+.flow-grid{grid-template-columns:1fr;}
 .detail-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
 .detail-actions{gap:4px;}
 .detail-actions .btn{font-size:11px;padding:5px 8px;}
@@ -188,130 +292,233 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .form-footer{gap:6px;}
 .trump-card{padding:11px 12px;}
 .trade-card{padding:10px 12px;}
+.flow-scan-box{flex-direction:column;align-items:flex-start;}
 }
 </style>
 </head>
 <body>
 <div class="app">
 <div class="topbar">
-<div class="logo">flow<span>.</span>desk</div>
-<div class="tabs">
-<button class="tab active" id="tab-signals" onclick="switchTab('signals',this)">Signals</button>
-<button class="tab" id="tab-trump" onclick="switchTab('trump',this)">Trump tracker</button>
-<button class="tab" id="tab-journal" onclick="switchTab('journal',this)">Journal</button>
-</div>
-<div class="topbar-right" id="clock"></div>
+  <div class="logo">flow<span>.</span>desk</div>
+  <div class="tabs">
+    <button class="tab active" id="tab-signals" onclick="switchTab('signals',this)">Signals</button>
+    <button class="tab" id="tab-trump" onclick="switchTab('trump',this)">Trump tracker</button>
+    <button class="tab" id="tab-flow" onclick="switchTab('flow',this)">Flow</button>
+    <button class="tab" id="tab-journal" onclick="switchTab('journal',this)">Journal</button>
+  </div>
+  <div class="topbar-right" id="clock"></div>
 </div>
 
 <div class="content">
 
 <!-- ── SIGNALS ── -->
 <div id="page-signals" class="page active">
-<div class="metrics">
-<div class="metric"><div class="metric-label">Watching</div><div class="metric-value" id="cnt-w">0</div><div class="metric-sub">tickers</div></div>
-<div class="metric"><div class="metric-label">Strong</div><div class="metric-value" id="cnt-s">0</div><div class="metric-sub">3 signals</div></div>
-<div class="metric"><div class="metric-label">Watch</div><div class="metric-value" id="cnt-c">0</div><div class="metric-sub">2 signals</div></div>
-</div>
-<div class="detail" id="detail">
-<div class="detail-top">
-<span class="detail-sym" id="d-sym">—</span>
-<div class="detail-actions">
-<button class="btn" id="btn-fv">Finviz ↗</button>
-<button class="btn" id="btn-bc">Barchart ↗</button>
-<button class="btn" onclick="refreshTicker()">Refresh</button>
-<button class="btn" onclick="closeDetail()">✕</button>
-</div>
-</div>
-<div class="detail-grid">
-<div class="df"><div class="df-label">Price</div><div class="df-val" id="d-price">—</div></div>
-<div class="df"><div class="df-label">RSI</div><div class="df-val" id="d-rsi">—</div></div>
-<div class="df"><div class="df-label">Target</div><div class="df-val" id="d-target">—</div></div>
-<div class="df"><div class="df-label">Stop Loss</div><input class="df-input" id="d-stop" placeholder="e.g. 34.00" oninput="saveField('stop',this.value)"/></div>
-<div class="df"><div class="df-label">Earnings</div><input class="df-input" id="d-earnings" placeholder="e.g. May 7" oninput="saveField('earnings',this.value)"/></div>
-</div>
-<div class="small-label" style="margin-bottom:8px;">Signals — click to cycle</div>
-<div class="sig-toggles">
-<button class="stog" id="tog-congress" onclick="toggleSig('congress')">Congress buy</button>
-<button class="stog" id="tog-options" onclick="toggleSig('options')">Options flow</button>
-<button class="stog" id="tog-technical" onclick="toggleSig('technical')">Technical</button>
-</div>
-<div class="small-label">Notes</div>
-<textarea class="notes" id="d-notes" placeholder="Thesis, entry, exit targets..." oninput="saveNotes()"></textarea>
-</div>
-<div class="section-head">Watchlist
-<div class="legend">
-<div class="li"><div class="ld" style="background:#4ade80;"></div>confirmed</div>
-<div class="li"><div class="ld" style="background:#fbbf24;"></div>partial</div>
-<div class="li"><div class="ld" style="background:#f87171;"></div>no signal</div>
-<div class="li"><div class="ld" style="background:#3d4047;"></div>unchecked</div>
-</div>
-</div>
-<div class="watchlist" id="watchlist"></div>
-<div class="status-msg" id="lookup-status"></div>
-<div class="add-row">
-<input type="text" id="t-input" placeholder="Type ticker + Enter to auto-lookup..." maxlength="10" onkeydown="if(event.key==='Enter')addTicker()"/>
-<button id="lookup-btn" onclick="addTicker()">Lookup</button>
-</div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Watching</div><div class="metric-value" id="cnt-w">0</div><div class="metric-sub">tickers</div></div>
+    <div class="metric"><div class="metric-label">Strong</div><div class="metric-value" id="cnt-s">0</div><div class="metric-sub">3 signals</div></div>
+    <div class="metric"><div class="metric-label">Watch</div><div class="metric-value" id="cnt-c">0</div><div class="metric-sub">2 signals</div></div>
+  </div>
+  <div class="detail" id="detail">
+    <div class="detail-top">
+      <span class="detail-sym" id="d-sym">—</span>
+      <div class="detail-actions">
+        <button class="btn" id="btn-fv">Finviz ↗</button>
+        <button class="btn" id="btn-bc">Barchart ↗</button>
+        <button class="btn" onclick="refreshTicker()">Refresh</button>
+        <button class="btn" onclick="closeDetail()">✕</button>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="df"><div class="df-label">Price</div><div class="df-val" id="d-price">—</div></div>
+      <div class="df"><div class="df-label">RSI</div><div class="df-val" id="d-rsi">—</div></div>
+      <div class="df"><div class="df-label">Target</div><div class="df-val" id="d-target">—</div></div>
+      <div class="df"><div class="df-label">Stop Loss</div><input class="df-input" id="d-stop" placeholder="e.g. 34.00" oninput="saveField('stop',this.value)"/></div>
+      <div class="df"><div class="df-label">Earnings</div><input class="df-input" id="d-earnings" placeholder="e.g. May 7" oninput="saveField('earnings',this.value)"/></div>
+    </div>
+    <div class="small-label" style="margin-bottom:8px;">Signals — click to cycle</div>
+    <div class="sig-toggles">
+      <button class="stog" id="tog-congress" onclick="toggleSig('congress')">Congress buy</button>
+      <button class="stog" id="tog-options" onclick="toggleSig('options')">Options flow</button>
+      <button class="stog" id="tog-technical" onclick="toggleSig('technical')">Technical</button>
+    </div>
+    <div class="small-label">Notes</div>
+    <textarea class="notes" id="d-notes" placeholder="Thesis, entry, exit targets..." oninput="saveNotes()"></textarea>
+  </div>
+  <div class="section-head">Watchlist
+    <div class="legend">
+      <div class="li"><div class="ld" style="background:#4ade80;"></div>confirmed</div>
+      <div class="li"><div class="ld" style="background:#fbbf24;"></div>partial</div>
+      <div class="li"><div class="ld" style="background:#f87171;"></div>no signal</div>
+      <div class="li"><div class="ld" style="background:#3d4047;"></div>unchecked</div>
+    </div>
+  </div>
+  <div class="watchlist" id="watchlist"></div>
+  <div class="status-msg" id="lookup-status"></div>
+  <div class="add-row">
+    <input type="text" id="t-input" placeholder="Type ticker + Enter to auto-lookup..." maxlength="10" onkeydown="if(event.key==='Enter')addTicker()"/>
+    <button id="lookup-btn" onclick="addTicker()">Lookup</button>
+  </div>
 </div>
 
 <!-- ── TRUMP TRACKER ── -->
 <div id="page-trump" class="page">
-<div class="trump-metrics">
-<div class="metric"><div class="metric-label">Loaded</div><div class="metric-value" id="tr-count">0</div><div class="metric-sub">announcements</div></div>
-<div class="metric"><div class="metric-label">High impact</div><div class="metric-value" id="tr-high">0</div><div class="metric-sub">market movers</div></div>
+  <div class="trump-metrics">
+    <div class="metric"><div class="metric-label">Loaded</div><div class="metric-value" id="tr-count">0</div><div class="metric-sub">announcements</div></div>
+    <div class="metric"><div class="metric-label">High impact</div><div class="metric-value" id="tr-high">0</div><div class="metric-sub">market movers</div></div>
+  </div>
+  <div class="scan-box">
+    <p>One click — scans Trump's latest announcements, Truth Social posts, and policy news, then analyzes each for market impact and flags tickers on your watchlist.</p>
+    <button class="scan-btn" id="scan-btn" onclick="runScan()">Scan latest announcements</button>
+    <div class="last-scan" id="last-scan"></div>
+  </div>
+  <div id="trump-feed"><div class="empty">No announcements loaded yet.</div></div>
 </div>
-<div class="scan-box">
-<p>One click — scans Trump's latest announcements, Truth Social posts, and policy news, then analyzes each for market impact and flags tickers on your watchlist.</p>
-<button class="scan-btn" id="scan-btn" onclick="runScan()">Scan latest announcements</button>
-<div class="last-scan" id="last-scan"></div>
-</div>
-<div id="trump-feed"><div class="empty">No announcements loaded yet.</div></div>
+
+<!-- ── INSTITUTIONAL FLOW ── -->
+<div id="page-flow" class="page">
+
+  <!-- API Key Setup -->
+  <div class="api-prompt" id="uw-api-prompt">
+    <div class="api-prompt-title">⚡ Unusual Whales API Key Required</div>
+    <div class="api-prompt-desc">Enter your Unusual Whales API key to pull live dark pool prints, options flow, and congressional trades. Get your key at unusualwhales.com/developers ($48/mo). Key is stored locally — never sent anywhere except Unusual Whales.</div>
+    <div class="api-input-row">
+      <input type="password" id="uw-key-input" placeholder="uw_xxxxxxxxxxxxxxxxxxxxxxxx" />
+      <button class="flow-btn" onclick="saveUWKey()">Save key</button>
+      <button class="flow-btn secondary" onclick="runFlowDemo()">Demo mode</button>
+    </div>
+  </div>
+
+  <!-- Metrics row -->
+  <div class="flow-metrics">
+    <div class="flow-metric cyan">
+      <div class="metric-label">Dark pool prints</div>
+      <div class="metric-value" id="fl-dp-count" style="color:var(--cyan)">—</div>
+      <div class="metric-sub">today, $5M+</div>
+    </div>
+    <div class="flow-metric">
+      <div class="metric-label">Options sweeps</div>
+      <div class="metric-value" id="fl-opt-count">—</div>
+      <div class="metric-sub">unusual activity</div>
+    </div>
+    <div class="flow-metric">
+      <div class="metric-label">Congress trades</div>
+      <div class="metric-value" id="fl-cong-count">—</div>
+      <div class="metric-sub">recent disclosures</div>
+    </div>
+    <div class="flow-metric">
+      <div class="metric-label">Confluence signals</div>
+      <div class="metric-value" id="fl-conf-count" style="color:var(--green)">—</div>
+      <div class="metric-sub">high conviction</div>
+    </div>
+  </div>
+
+  <!-- Scan controls -->
+  <div class="flow-scan-box">
+    <div class="flow-scan-left">
+      <h3>Institutional Flow Intelligence</h3>
+      <p>Pulls dark pool prints, options sweeps, and congressional trades from Unusual Whales. Claude cross-references all three streams and surfaces high-conviction confluence signals with correlated Kalshi contracts.</p>
+    </div>
+    <div class="flow-scan-actions">
+      <div class="live-label" id="flow-live-label" style="display:none;"><span class="live-dot"></span>live</div>
+      <button class="flow-btn secondary" id="flow-clear-btn" onclick="clearFlowData()" style="display:none;">Clear</button>
+      <button class="flow-btn" id="flow-scan-btn" onclick="runFlowScan()">Scan now</button>
+      <div class="last-scan" id="flow-last-scan"></div>
+    </div>
+  </div>
+
+  <!-- Three panel grid -->
+  <div class="flow-grid">
+    <!-- Dark Pool Panel -->
+    <div class="flow-panel">
+      <div class="flow-panel-head">
+        <div class="flow-panel-title"><span class="dot-dp"></span>Dark pool prints</div>
+        <span style="font-size:9px;color:var(--hint);font-family:'DM Mono',monospace;">$5M+ blocks</span>
+      </div>
+      <div class="flow-panel-body" id="dp-panel">
+        <div class="flow-empty"><div class="flow-empty-icon">◈</div>No data yet.<br>Run a scan to pull live dark pool prints.</div>
+      </div>
+    </div>
+
+    <!-- Options Flow Panel -->
+    <div class="flow-panel">
+      <div class="flow-panel-head">
+        <div class="flow-panel-title"><span class="dot-opt"></span>Options flow</div>
+        <span style="font-size:9px;color:var(--hint);font-family:'DM Mono',monospace;">unusual sweeps</span>
+      </div>
+      <div class="flow-panel-body" id="opt-panel">
+        <div class="flow-empty"><div class="flow-empty-icon">◈</div>No data yet.<br>Run a scan to pull options sweeps.</div>
+      </div>
+    </div>
+
+    <!-- Congress Panel -->
+    <div class="flow-panel">
+      <div class="flow-panel-head">
+        <div class="flow-panel-title"><span class="dot-cong"></span>Congressional trades</div>
+        <span style="font-size:9px;color:var(--hint);font-family:'DM Mono',monospace;">recent disclosures</span>
+      </div>
+      <div class="flow-panel-body" id="cong-panel">
+        <div class="flow-empty"><div class="flow-empty-icon">◈</div>No data yet.<br>Run a scan to pull congressional trades.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Confluence Analysis -->
+  <div class="section-head" style="margin-top:4px;">AI Confluence Analysis
+    <span style="font-size:9px;color:var(--hint);">powered by Claude</span>
+  </div>
+  <div id="confluence-feed">
+    <div class="flow-empty" style="padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;">
+      <div class="flow-empty-icon">⬡</div>
+      Run a scan to generate confluence signals and Kalshi contract suggestions.
+    </div>
+  </div>
+
 </div>
 
 <!-- ── JOURNAL ── -->
 <div id="page-journal" class="page">
-<div class="jmetrics">
-<div class="metric"><div class="metric-label">Total trades</div><div class="metric-value" id="j-total">0</div><div class="metric-sub">logged</div></div>
-<div class="metric"><div class="metric-label">Win rate</div><div class="metric-value" id="j-wr">—</div><div class="metric-sub">closed trades</div></div>
-<div class="metric"><div class="metric-label">Total P&L</div><div class="metric-value" id="j-pnl">$0</div><div class="metric-sub">paper</div></div>
-<div class="metric"><div class="metric-label">Open</div><div class="metric-value" id="j-open">0</div><div class="metric-sub">active</div></div>
-</div>
-<div class="form-card">
-<div class="form-title">Log a trade</div>
-<div class="fg2">
-<div class="ff"><label>Ticker</label><input type="text" id="jf-sym" placeholder="LGIH" maxlength="10"/></div>
-<div class="ff"><label>Type</label><select id="jf-type"><option value="Long">Long (stock)</option><option value="Short">Short (stock)</option><option value="Call">Call (option)</option><option value="Put">Put (option)</option></select></div>
-</div>
-<div class="fg3">
-<div class="ff"><label>Entry price</label><input type="number" id="jf-entry" placeholder="37.45" step="0.01"/></div>
-<div class="ff"><label>Exit price</label><input type="number" id="jf-exit" placeholder="leave blank if open" step="0.01"/></div>
-<div class="ff"><label>Shares / contracts</label><input type="number" id="jf-size" placeholder="100" step="1"/></div>
-</div>
-<div class="fg3">
-<div class="ff"><label>Entry date</label><input type="date" id="jf-edate"/></div>
-<div class="ff"><label>Exit date</label><input type="date" id="jf-xdate"/></div>
-<div class="ff"><label>Signal score</label><select id="jf-score"><option value="">— select —</option><option value="Strong">Strong (3 signals)</option><option value="Watch">Watch (2 signals)</option><option value="Weak">Weak (1 signal)</option></select></div>
-</div>
-<div class="sig-checks">
-<label><input type="checkbox" id="jf-sc"> Congress signal</label>
-<label><input type="checkbox" id="jf-so"> Options flow</label>
-<label><input type="checkbox" id="jf-st"> Technical</label>
-</div>
-<div class="ff" style="margin-bottom:10px;"><label>Thesis / notes</label><textarea id="jf-notes" placeholder="Why you took this trade, what you saw, what you learned..."></textarea></div>
-<div class="form-footer">
-<button class="btn" onclick="clearJForm()">Clear</button>
-<button class="btn" onclick="logTrade()">Log trade</button>
-</div>
-</div>
-<div class="section-head">Trade log
-<div class="filt-row">
-<button class="filt-btn active" onclick="setJFilter('all',this)">All</button>
-<button class="filt-btn" onclick="setJFilter('open',this)">Open</button>
-<button class="filt-btn" onclick="setJFilter('win',this)">Wins</button>
-<button class="filt-btn" onclick="setJFilter('loss',this)">Losses</button>
-</div>
-</div>
-<div id="trades-list"></div>
+  <div class="jmetrics">
+    <div class="metric"><div class="metric-label">Total trades</div><div class="metric-value" id="j-total">0</div><div class="metric-sub">logged</div></div>
+    <div class="metric"><div class="metric-label">Win rate</div><div class="metric-value" id="j-wr">—</div><div class="metric-sub">closed trades</div></div>
+    <div class="metric"><div class="metric-label">Total P&L</div><div class="metric-value" id="j-pnl">$0</div><div class="metric-sub">paper</div></div>
+    <div class="metric"><div class="metric-label">Open</div><div class="metric-value" id="j-open">0</div><div class="metric-sub">active</div></div>
+  </div>
+  <div class="form-card">
+    <div class="form-title">Log a trade</div>
+    <div class="fg2">
+      <div class="ff"><label>Ticker</label><input type="text" id="jf-sym" placeholder="LGIH" maxlength="10"/></div>
+      <div class="ff"><label>Type</label><select id="jf-type"><option value="Long">Long (stock)</option><option value="Short">Short (stock)</option><option value="Call">Call (option)</option><option value="Put">Put (option)</option></select></div>
+    </div>
+    <div class="fg3">
+      <div class="ff"><label>Entry price</label><input type="number" id="jf-entry" placeholder="37.45" step="0.01"/></div>
+      <div class="ff"><label>Exit price</label><input type="number" id="jf-exit" placeholder="leave blank if open" step="0.01"/></div>
+      <div class="ff"><label>Shares / contracts</label><input type="number" id="jf-size" placeholder="100" step="1"/></div>
+    </div>
+    <div class="fg3">
+      <div class="ff"><label>Entry date</label><input type="date" id="jf-edate"/></div>
+      <div class="ff"><label>Exit date</label><input type="date" id="jf-xdate"/></div>
+      <div class="ff"><label>Signal score</label><select id="jf-score"><option value="">— select —</option><option value="Strong">Strong (3 signals)</option><option value="Watch">Watch (2 signals)</option><option value="Weak">Weak (1 signal)</option></select></div>
+    </div>
+    <div class="sig-checks">
+      <label><input type="checkbox" id="jf-sc"> Congress signal</label>
+      <label><input type="checkbox" id="jf-so"> Options flow</label>
+      <label><input type="checkbox" id="jf-st"> Technical</label>
+    </div>
+    <div class="ff" style="margin-bottom:10px;"><label>Thesis / notes</label><textarea id="jf-notes" placeholder="Why you took this trade, what you saw, what you learned..."></textarea></div>
+    <div class="form-footer">
+      <button class="btn" onclick="clearJForm()">Clear</button>
+      <button class="btn" onclick="logTrade()">Log trade</button>
+    </div>
+  </div>
+  <div class="section-head">Trade log
+    <div class="filt-row">
+      <button class="filt-btn active" onclick="setJFilter('all',this)">All</button>
+      <button class="filt-btn" onclick="setJFilter('open',this)">Open</button>
+      <button class="filt-btn" onclick="setJFilter('win',this)">Wins</button>
+      <button class="filt-btn" onclick="setJFilter('loss',this)">Losses</button>
+    </div>
+  </div>
+  <div id="trades-list"></div>
 </div>
 
 </div><!-- /content -->
@@ -323,262 +530,579 @@ let trades=JSON.parse(localStorage.getItem('sd_journal')||'[]');
 let jfilter='all';
 function saveJournal(){localStorage.setItem('sd_journal',JSON.stringify(trades));}
 function jPnl(t){
-if(!t.exit||!t.entry||!t.size)return null;
-const diff=t.type==='Short'||t.type==='Put'?t.entry-t.exit:t.exit-t.entry;
-return diff*t.size;
+  if(!t.exit||!t.entry||!t.size)return null;
+  const diff=t.type==='Short'||t.type==='Put'?t.entry-t.exit:t.exit-t.entry;
+  return diff*t.size;
 }
 function jStatus(t){if(!t.exit)return'open';return jPnl(t)>=0?'win':'loss';}
 function setJFilter(f,el){jfilter=f;document.querySelectorAll('.filt-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderJournal();}
 function updateJMetrics(){
-const closed=trades.filter(t=>t.exit);
-const wins=closed.filter(t=>jPnl(t)>=0);
-const totalPnl=closed.reduce((s,t)=>s+(jPnl(t)||0),0);
-document.getElementById('j-total').textContent=trades.length;
-document.getElementById('j-wr').textContent=closed.length?Math.round(wins.length/closed.length*100)+'%':'—';
-const pel=document.getElementById('j-pnl');
-pel.textContent=(totalPnl>=0?'+$':'-$')+Math.abs(totalPnl).toFixed(2);
-pel.style.color=totalPnl>=0?'var(--green)':totalPnl<0?'var(--red)':'';
-document.getElementById('j-open').textContent=trades.filter(t=>!t.exit).length;
+  const closed=trades.filter(t=>t.exit);
+  const wins=closed.filter(t=>jPnl(t)>=0);
+  const totalPnl=closed.reduce((s,t)=>s+(jPnl(t)||0),0);
+  document.getElementById('j-total').textContent=trades.length;
+  document.getElementById('j-wr').textContent=closed.length?Math.round(wins.length/closed.length*100)+'%':'—';
+  const pel=document.getElementById('j-pnl');
+  pel.textContent=(totalPnl>=0?'+$':'-$')+Math.abs(totalPnl).toFixed(2);
+  pel.style.color=totalPnl>=0?'var(--green)':totalPnl<0?'var(--red)':'';
+  document.getElementById('j-open').textContent=trades.filter(t=>!t.exit).length;
 }
 function renderJournal(){
-const list=document.getElementById('trades-list');
-const filtered=trades.filter(t=>{
-if(jfilter==='all')return true;
-if(jfilter==='open')return!t.exit;
-if(jfilter==='win')return t.exit&&jPnl(t)>=0;
-if(jfilter==='loss')return t.exit&&jPnl(t)<0;
-return true;
-});
-if(!filtered.length){list.innerHTML='<div class="empty">No trades yet.</div>';updateJMetrics();return;}
-list.innerHTML=filtered.map(t=>{
-const st=jStatus(t);
-const p=jPnl(t);
-const idx=trades.indexOf(t);
-const typeClass='tt-'+t.type.toLowerCase();
-const sigs=['congress','options','technical'];
-const sigPills=sigs.map(s=>`<span class="tsig${t.signals&&t.signals.includes(s)?' on':''}">${s}</span>`).join('');
-return`<div class="trade-card ${st}">
-<div class="trade-top">
-<div class="trade-sym">${t.symbol}</div>
-<span class="ttype ${typeClass}">${t.type}</span>
-${t.score?`<span style="font-size:10px;color:var(--hint);">${t.score}</span>`:''}
-<span class="tstatus ts-${st}">${st}</span>
-</div>
-<div class="tgrid">
-<div class="tf"><div class="tf-label">Entry</div><div class="tf-val">$${t.entry}</div></div>
-<div class="tf"><div class="tf-label">Exit</div><div class="tf-val">${t.exit?'$'+t.exit:'—'}</div></div>
-<div class="tf"><div class="tf-label">Size</div><div class="tf-val">${t.size||'—'}</div></div>
-<div class="tf"><div class="tf-label">P&L</div><div class="tf-val ${p===null?'':(p>=0?'win':'loss')}">${p===null?'open':(p>=0?'+$':'-$')+Math.abs(p).toFixed(2)}</div></div>
-</div>
-<div class="trade-sigs">${sigPills}</div>
-${t.notes?`<div class="trade-notes-text">${t.notes}</div>`:''}
-<div class="trade-actions">
-${!t.exit?`<button class="btn" onclick="closeTrade(${idx})">Close trade</button>`:''}
-<button class="btn" onclick="deleteTrade(${idx})">Remove</button>
-</div>
-</div>`;
-}).join('');
-updateJMetrics();
+  const list=document.getElementById('trades-list');
+  const filtered=trades.filter(t=>{
+    if(jfilter==='all')return true;
+    if(jfilter==='open')return!t.exit;
+    if(jfilter==='win')return t.exit&&jPnl(t)>=0;
+    if(jfilter==='loss')return t.exit&&jPnl(t)<0;
+    return true;
+  });
+  if(!filtered.length){list.innerHTML='<div class="empty">No trades yet.</div>';updateJMetrics();return;}
+  list.innerHTML=filtered.map(t=>{
+    const st=jStatus(t);
+    const p=jPnl(t);
+    const idx=trades.indexOf(t);
+    const typeClass='tt-'+t.type.toLowerCase();
+    const sigs=['congress','options','technical'];
+    const sigPills=sigs.map(s=>`<span class="tsig${t.signals&&t.signals.includes(s)?' on':''}">${s}</span>`).join('');
+    return`<div class="trade-card ${st}">
+      <div class="trade-top">
+        <div class="trade-sym">${t.symbol}</div>
+        <span class="ttype ${typeClass}">${t.type}</span>
+        ${t.score?`<span style="font-size:10px;color:var(--hint);">${t.score}</span>`:''}
+        <span class="tstatus ts-${st}">${st}</span>
+      </div>
+      <div class="tgrid">
+        <div class="tf"><div class="tf-label">Entry</div><div class="tf-val">$${t.entry}</div></div>
+        <div class="tf"><div class="tf-label">Exit</div><div class="tf-val">${t.exit?'$'+t.exit:'—'}</div></div>
+        <div class="tf"><div class="tf-label">Size</div><div class="tf-val">${t.size||'—'}</div></div>
+        <div class="tf"><div class="tf-label">P&L</div><div class="tf-val ${p===null?'':(p>=0?'win':'loss')}">${p===null?'open':(p>=0?'+$':'-$')+Math.abs(p).toFixed(2)}</div></div>
+      </div>
+      <div class="trade-sigs">${sigPills}</div>
+      ${t.notes?`<div class="trade-notes-text">${t.notes}</div>`:''}
+      <div class="trade-actions">
+        ${!t.exit?`<button class="btn" onclick="closeTrade(${idx})">Close trade</button>`:''}
+        <button class="btn" onclick="deleteTrade(${idx})">Remove</button>
+      </div>
+    </div>`;
+  }).join('');
+  updateJMetrics();
 }
 function logTrade(){
-const sym=document.getElementById('jf-sym').value.trim().toUpperCase();
-const entry=parseFloat(document.getElementById('jf-entry').value);
-if(!sym||!entry){alert('Ticker and entry price required.');return;}
-const exit=parseFloat(document.getElementById('jf-exit').value)||null;
-const size=parseFloat(document.getElementById('jf-size').value)||null;
-const signals=[];
-if(document.getElementById('jf-sc').checked)signals.push('congress');
-if(document.getElementById('jf-so').checked)signals.push('options');
-if(document.getElementById('jf-st').checked)signals.push('technical');
-trades.unshift({symbol:sym,type:document.getElementById('jf-type').value,entry:entry.toFixed(2),exit:exit?exit.toFixed(2):null,size,score:document.getElementById('jf-score').value||null,signals,notes:document.getElementById('jf-notes').value.trim(),entryDate:document.getElementById('jf-edate').value,exitDate:document.getElementById('jf-xdate').value});
-saveJournal();clearJForm();renderJournal();
+  const sym=document.getElementById('jf-sym').value.trim().toUpperCase();
+  const entry=parseFloat(document.getElementById('jf-entry').value);
+  if(!sym||!entry){alert('Ticker and entry price required.');return;}
+  const exit=parseFloat(document.getElementById('jf-exit').value)||null;
+  const size=parseFloat(document.getElementById('jf-size').value)||null;
+  const signals=[];
+  if(document.getElementById('jf-sc').checked)signals.push('congress');
+  if(document.getElementById('jf-so').checked)signals.push('options');
+  if(document.getElementById('jf-st').checked)signals.push('technical');
+  trades.unshift({symbol:sym,type:document.getElementById('jf-type').value,entry:entry.toFixed(2),exit:exit?exit.toFixed(2):null,size,score:document.getElementById('jf-score').value||null,signals,notes:document.getElementById('jf-notes').value.trim(),entryDate:document.getElementById('jf-edate').value,exitDate:document.getElementById('jf-xdate').value});
+  saveJournal();clearJForm();renderJournal();
 }
 function clearJForm(){
-['jf-sym','jf-entry','jf-exit','jf-size','jf-notes','jf-edate','jf-xdate'].forEach(id=>document.getElementById(id).value='');
-document.getElementById('jf-type').value='Long';
-document.getElementById('jf-score').value='';
-['jf-sc','jf-so','jf-st'].forEach(id=>document.getElementById(id).checked=false);
-document.getElementById('jf-edate').value=new Date().toISOString().split('T')[0];
+  ['jf-sym','jf-entry','jf-exit','jf-size','jf-notes','jf-edate','jf-xdate'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('jf-type').value='Long';
+  document.getElementById('jf-score').value='';
+  ['jf-sc','jf-so','jf-st'].forEach(id=>document.getElementById(id).checked=false);
+  document.getElementById('jf-edate').value=new Date().toISOString().split('T')[0];
 }
 function closeTrade(i){
-const price=prompt('Exit price:');
-if(!price)return;
-trades[i].exit=parseFloat(price).toFixed(2);
-trades[i].exitDate=new Date().toISOString().split('T')[0];
-saveJournal();renderJournal();
+  const price=prompt('Exit price:');
+  if(!price)return;
+  trades[i].exit=parseFloat(price).toFixed(2);
+  trades[i].exitDate=new Date().toISOString().split('T')[0];
+  saveJournal();renderJournal();
 }
 function deleteTrade(i){trades.splice(i,1);saveJournal();renderJournal();}
 
 // ── SIGNALS / WATCHLIST ──
 let tickers=JSON.parse(localStorage.getItem('sd_v2')||'null')||[
-{symbol:'LGIH',name:'LGI Homes',price:'37.45',rsi:'38',target:'75.90',stop:'',earnings:'',congress:'green',options:'gray',technical:'amber',notes:'Tim Moore buying $250K+ in March. Spring sales event through Apr 26. RSI climbing out of oversold.'}
+  {symbol:'LGIH',name:'LGI Homes',price:'37.45',rsi:'38',target:'75.90',stop:'',earnings:'',congress:'green',options:'gray',technical:'amber',notes:'Tim Moore buying $250K+ in March. Spring sales event through Apr 26. RSI climbing out of oversold.'}
 ];
 let selected=null,trumpItems=[];
 function save(){localStorage.setItem('sd_v2',JSON.stringify(tickers));}
 function clock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true});}
 setInterval(clock,1000);clock();
 function switchTab(tab,el){
-document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-el.classList.add('active');document.getElementById('page-'+tab).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');document.getElementById('page-'+tab).classList.add('active');
 }
 function scoreOf(t){
-const g=[t.congress,t.options,t.technical].filter(s=>s==='green').length;
-const a=[t.congress,t.options,t.technical].filter(s=>s==='amber').length;
-if(g===3)return'strong';if(g>=2||(g===1&&a>=1))return'watch';
-if(g===1||a>=1)return'weak';return'none';
+  const g=[t.congress,t.options,t.technical].filter(s=>s==='green').length;
+  const a=[t.congress,t.options,t.technical].filter(s=>s==='amber').length;
+  if(g===3)return'strong';if(g>=2||(g===1&&a>=1))return'watch';
+  if(g===1||a>=1)return'weak';return'none';
 }
 function sigCls(v){return v==='green'?'sig-green':v==='red'?'sig-red':v==='amber'?'sig-amber':'sig-gray';}
 function scoreMeta(s){
-if(s==='strong')return{t:'strong',c:'score-strong'};
-if(s==='watch')return{t:'watch',c:'score-watch'};
-if(s==='weak')return{t:'weak',c:'score-weak'};
-return{t:'—',c:'score-none'};
+  if(s==='strong')return{t:'strong',c:'score-strong'};
+  if(s==='watch')return{t:'watch',c:'score-watch'};
+  if(s==='weak')return{t:'weak',c:'score-weak'};
+  return{t:'—',c:'score-none'};
 }
 function updateMetrics(){
-document.getElementById('cnt-w').textContent=tickers.length;
-document.getElementById('cnt-s').textContent=tickers.filter(t=>scoreOf(t)==='strong').length;
-document.getElementById('cnt-c').textContent=tickers.filter(t=>scoreOf(t)==='watch').length;
+  document.getElementById('cnt-w').textContent=tickers.length;
+  document.getElementById('cnt-s').textContent=tickers.filter(t=>scoreOf(t)==='strong').length;
+  document.getElementById('cnt-c').textContent=tickers.filter(t=>scoreOf(t)==='watch').length;
 }
 function render(){
-const wl=document.getElementById('watchlist');
-if(!tickers.length){wl.innerHTML='<div class="empty">No tickers yet.</div>';updateMetrics();return;}
-wl.innerHTML=tickers.map((t,i)=>{
-const sm=scoreMeta(scoreOf(t));
-const notePreview=t.notes?t.notes.split('\n')[0].trim():'';
-return`<div class="ticker-row${selected===i?' selected':''}${t._loading?' loading':''}" onclick="openDetail(${i})">
-<div class="t-symbol">${t.symbol}</div>
-<div class="t-name">${t._loading?'looking up...':t.name||'—'}</div>
-<div class="signals">
-<div class="sig ${sigCls(t.congress)}">C</div>
-<div class="sig ${sigCls(t.options)}">O</div>
-<div class="sig ${sigCls(t.technical)}">T</div>
-</div>
-<span class="score ${sm.c}">${sm.t}</span>
-<button class="rm-btn" onclick="event.stopPropagation();removeTicker(${i})">✕</button>
-${notePreview?`<div class="t-note-preview">${notePreview}</div>`:''}
-</div>`;
-}).join('');
-updateMetrics();
+  const wl=document.getElementById('watchlist');
+  if(!tickers.length){wl.innerHTML='<div class="empty">No tickers yet.</div>';updateMetrics();return;}
+  wl.innerHTML=tickers.map((t,i)=>{
+    const sm=scoreMeta(scoreOf(t));
+    const notePreview=t.notes?t.notes.split('\n')[0].trim():'';
+    return`<div class="ticker-row${selected===i?' selected':''}${t._loading?' loading':''}" onclick="openDetail(${i})">
+      <div class="t-symbol">${t.symbol}</div>
+      <div class="t-name">${t._loading?'looking up...':t.name||'—'}</div>
+      <div class="signals">
+        <div class="sig ${sigCls(t.congress)}">C</div>
+        <div class="sig ${sigCls(t.options)}">O</div>
+        <div class="sig ${sigCls(t.technical)}">T</div>
+      </div>
+      <span class="score ${sm.c}">${sm.t}</span>
+      <button class="rm-btn" onclick="event.stopPropagation();removeTicker(${i})">✕</button>
+      ${notePreview?`<div class="t-note-preview">${notePreview}</div>`:''}
+    </div>`;
+  }).join('');
+  updateMetrics();
 }
 async function addTicker(sym){
-const inp=document.getElementById('t-input');
-if(!sym)sym=inp.value.trim().toUpperCase();
-if(!sym||tickers.find(t=>t.symbol===sym)){if(inp)inp.value='';return;}
-const idx=tickers.length;
-tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',stop:'',earnings:'',congress:'gray',options:'gray',technical:'gray',notes:'',_loading:true});
-if(inp)inp.value='';render();
-await lookupTicker(sym,idx);
+  const inp=document.getElementById('t-input');
+  if(!sym)sym=inp.value.trim().toUpperCase();
+  if(!sym||tickers.find(t=>t.symbol===sym)){if(inp)inp.value='';return;}
+  const idx=tickers.length;
+  tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',stop:'',earnings:'',congress:'gray',options:'gray',technical:'gray',notes:'',_loading:true});
+  if(inp)inp.value='';render();
+  await lookupTicker(sym,idx);
 }
 async function lookupTicker(sym,idx){
-const st=document.getElementById('lookup-status');
-const btn=document.getElementById('lookup-btn');
-st.innerHTML='<span class="spin">⟳</span> Looking up '+sym+'...';
-btn.disabled=true;
-try{
-const res=await fetch('/api/lookup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symbol:sym})});
-const data=await res.json();
-if(data.error)throw new Error(data.error);
-// preserve manually entered fields when refreshing
-const preserved={stop:tickers[idx].stop||'',earnings:tickers[idx].earnings||'',notes:tickers[idx].notes||''};
-tickers[idx]={...data,...preserved,_loading:false};
-save();render();openDetail(idx);
-st.textContent='';
-}catch(err){
-tickers[idx]._loading=false;
-tickers[idx].name='Lookup failed';
-save();render();
-st.textContent='Error: '+err.message;
-setTimeout(()=>st.textContent='',4000);
-}
-btn.disabled=false;
+  const st=document.getElementById('lookup-status');
+  const btn=document.getElementById('lookup-btn');
+  st.innerHTML='<span class="spin">⟳</span> Looking up '+sym+'...';
+  btn.disabled=true;
+  try{
+    const res=await fetch('/api/lookup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symbol:sym})});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    const preserved={stop:tickers[idx].stop||'',earnings:tickers[idx].earnings||'',notes:tickers[idx].notes||''};
+    tickers[idx]={...data,...preserved,_loading:false};
+    save();render();openDetail(idx);
+    st.textContent='';
+  }catch(err){
+    tickers[idx]._loading=false;
+    tickers[idx].name='Lookup failed';
+    save();render();
+    st.textContent='Error: '+err.message;
+    setTimeout(()=>st.textContent='',4000);
+  }
+  btn.disabled=false;
 }
 async function refreshTicker(){
-if(selected===null)return;
-tickers[selected]._loading=true;render();
-await lookupTicker(tickers[selected].symbol,selected);
+  if(selected===null)return;
+  tickers[selected]._loading=true;render();
+  await lookupTicker(tickers[selected].symbol,selected);
 }
 function removeTicker(i){
-if(selected===i)closeDetail();
-tickers.splice(i,1);
-if(selected!==null&&selected>i)selected--;
-save();render();
+  if(selected===i)closeDetail();
+  tickers.splice(i,1);
+  if(selected!==null&&selected>i)selected--;
+  save();render();
 }
 function openDetail(i){
-selected=i;const t=tickers[i];
-document.getElementById('d-sym').textContent=t.symbol;
-document.getElementById('d-price').textContent=t.price||'—';
-document.getElementById('d-rsi').textContent=t.rsi||'—';
-document.getElementById('d-target').textContent=t.target?'$'+t.target:'—';
-document.getElementById('d-stop').value=t.stop||'';
-document.getElementById('d-earnings').value=t.earnings||'';
-document.getElementById('d-notes').value=t.notes||'';
-document.getElementById('btn-fv').onclick=()=>window.open('https://finviz.com/quote.ashx?t='+t.symbol,'_blank');
-document.getElementById('btn-bc').onclick=()=>window.open('https://www.barchart.com/stocks/quotes/'+t.symbol+'/options','_blank');
-updateToggles();document.getElementById('detail').classList.add('active');render();
+  selected=i;const t=tickers[i];
+  document.getElementById('d-sym').textContent=t.symbol;
+  document.getElementById('d-price').textContent=t.price||'—';
+  document.getElementById('d-rsi').textContent=t.rsi||'—';
+  document.getElementById('d-target').textContent=t.target?'$'+t.target:'—';
+  document.getElementById('d-stop').value=t.stop||'';
+  document.getElementById('d-earnings').value=t.earnings||'';
+  document.getElementById('d-notes').value=t.notes||'';
+  document.getElementById('btn-fv').onclick=()=>window.open('https://finviz.com/quote.ashx?t='+t.symbol,'_blank');
+  document.getElementById('btn-bc').onclick=()=>window.open('https://www.barchart.com/stocks/quotes/'+t.symbol+'/options','_blank');
+  updateToggles();document.getElementById('detail').classList.add('active');render();
 }
 function closeDetail(){selected=null;document.getElementById('detail').classList.remove('active');render();}
 function updateToggles(){
-if(selected===null)return;
-const t=tickers[selected];
-['congress','options','technical'].forEach(k=>{
-const b=document.getElementById('tog-'+k);b.className='stog';
-if(t[k]==='green')b.classList.add('g');
-else if(t[k]==='amber')b.classList.add('a');
-else if(t[k]==='red')b.classList.add('r');
-});
+  if(selected===null)return;
+  const t=tickers[selected];
+  ['congress','options','technical'].forEach(k=>{
+    const b=document.getElementById('tog-'+k);b.className='stog';
+    if(t[k]==='green')b.classList.add('g');
+    else if(t[k]==='amber')b.classList.add('a');
+    else if(t[k]==='red')b.classList.add('r');
+  });
 }
 function toggleSig(key){
-if(selected===null)return;
-const cycle={gray:'amber',amber:'green',green:'red',red:'gray'};
-tickers[selected][key]=cycle[tickers[selected][key]]||'gray';
-updateToggles();save();render();
+  if(selected===null)return;
+  const cycle={gray:'amber',amber:'green',green:'red',red:'gray'};
+  tickers[selected][key]=cycle[tickers[selected][key]]||'gray';
+  updateToggles();save();render();
 }
 function saveNotes(){if(selected!==null){tickers[selected].notes=document.getElementById('d-notes').value;save();render();}}
 function saveField(field,val){if(selected!==null){tickers[selected][field]=val;save();}}
 
 // ── TRUMP TRACKER ──
 async function runScan(){
-const btn=document.getElementById('scan-btn');
-const feed=document.getElementById('trump-feed');
-btn.disabled=true;btn.textContent='Scanning...';
-feed.innerHTML='<div class="empty"><span class="spin">⟳</span> Scanning...</div>';
-try{
-const res=await fetch('/api/trump-scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({watchlist:tickers.map(t=>t.symbol).join(', ')})});
-const data=await res.json();
-if(data.error)throw new Error(data.error);
-trumpItems=data;renderTrump();
-document.getElementById('tr-count').textContent=trumpItems.length;
-document.getElementById('tr-high').textContent=trumpItems.filter(i=>i.impact==='high').length;
-document.getElementById('last-scan').textContent='Last scanned '+new Date().toLocaleTimeString();
-}catch(err){
-feed.innerHTML='<div class="empty">Scan failed: '+err.message+'</div>';
-}
-btn.disabled=false;btn.textContent='Scan latest announcements';
+  const btn=document.getElementById('scan-btn');
+  const feed=document.getElementById('trump-feed');
+  btn.disabled=true;btn.textContent='Scanning...';
+  feed.innerHTML='<div class="empty"><span class="spin">⟳</span> Scanning...</div>';
+  try{
+    const res=await fetch('/api/trump-scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({watchlist:tickers.map(t=>t.symbol).join(', ')})});
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    trumpItems=data;renderTrump();
+    document.getElementById('tr-count').textContent=trumpItems.length;
+    document.getElementById('tr-high').textContent=trumpItems.filter(i=>i.impact==='high').length;
+    document.getElementById('last-scan').textContent='Last scanned '+new Date().toLocaleTimeString();
+  }catch(err){
+    feed.innerHTML='<div class="empty">Scan failed: '+err.message+'</div>';
+  }
+  btn.disabled=false;btn.textContent='Scan latest announcements';
 }
 function renderTrump(){
-const feed=document.getElementById('trump-feed'),ws=tickers.map(t=>t.symbol);
-if(!trumpItems.length){feed.innerHTML='<div class="empty">No results.</div>';return;}
-feed.innerHTML=trumpItems.map(item=>{
-const ic=item.impact==='high'?'imp-high':item.impact==='medium'?'imp-med':item.impact==='low'?'imp-low':'imp-neutral';
-const sectors=(item.sectors||[]).map(s=>`<span class="sector-tag">${s}</span>`).join('');
-const tags=(item.tickers||[]).map(t=>{const iw=ws.includes(t);return`<span class="ticker-tag${iw?' in-watch':''}" onclick="addFromTrump('${t}')">${t}${iw?' ✓':' +'}</span>`;}).join('');
-const sources=(item.sources||[]).map(s=>`<a href="${s.url}" target="_blank" style="font-size:10px;color:var(--blue);text-decoration:none;padding:2px 8px;border:1px solid var(--blue-border);border-radius:20px;background:var(--blue-bg);">${s.label} ↗</a>`).join('');
-return`<div class="trump-card"><div class="tc-top"><div><div class="tc-title">${item.title||''}</div><div class="tc-date">${item.date||''}</div></div><span class="imp ${ic}">${item.impact||'neutral'}</span></div><div class="tc-summary">${item.summary||''}</div><div class="tc-reason">${item.reasoning||''}</div><div class="tags">${sectors}${tags}</div>${sources?`<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;">${sources}</div>`:''}</div>`;
-}).join('');
+  const feed=document.getElementById('trump-feed'),ws=tickers.map(t=>t.symbol);
+  if(!trumpItems.length){feed.innerHTML='<div class="empty">No results.</div>';return;}
+  feed.innerHTML=trumpItems.map(item=>{
+    const ic=item.impact==='high'?'imp-high':item.impact==='medium'?'imp-med':item.impact==='low'?'imp-low':'imp-neutral';
+    const sectors=(item.sectors||[]).map(s=>`<span class="sector-tag">${s}</span>`).join('');
+    const tags=(item.tickers||[]).map(t=>{const iw=ws.includes(t);return`<span class="ticker-tag${iw?' in-watch':''}" onclick="addFromTrump('${t}')">${t}${iw?' ✓':' +'}</span>`;}).join('');
+    const sources=(item.sources||[]).map(s=>`<a href="${s.url}" target="_blank" style="font-size:10px;color:var(--blue);text-decoration:none;padding:2px 8px;border:1px solid var(--blue-border);border-radius:20px;background:var(--blue-bg);">${s.label} ↗</a>`).join('');
+    return`<div class="trump-card"><div class="tc-top"><div><div class="tc-title">${item.title||''}</div><div class="tc-date">${item.date||''}</div></div><span class="imp ${ic}">${item.impact||'neutral'}</span></div><div class="tc-summary">${item.summary||''}</div><div class="tc-reason">${item.reasoning||''}</div><div class="tags">${sectors}${tags}</div>${sources?`<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;">${sources}</div>`:''}</div>`;
+  }).join('');
 }
 async function addFromTrump(sym){
-if(tickers.find(t=>t.symbol===sym))return;
-const idx=tickers.length;
-tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',stop:'',earnings:'',congress:'gray',options:'gray',technical:'gray',notes:'Flagged by Trump tracker.',_loading:true});
-save();render();switchTab('signals',document.getElementById('tab-signals'));
-await lookupTicker(sym,idx);
+  if(tickers.find(t=>t.symbol===sym))return;
+  const idx=tickers.length;
+  tickers.push({symbol:sym,name:'',price:'',rsi:'',target:'',stop:'',earnings:'',congress:'gray',options:'gray',technical:'gray',notes:'Flagged by Trump tracker.',_loading:true});
+  save();render();switchTab('signals',document.getElementById('tab-signals'));
+  await lookupTicker(sym,idx);
+}
+
+// ── INSTITUTIONAL FLOW ──
+let uwKey=localStorage.getItem('fd_uw_key')||'';
+let flowData={darkPool:[],options:[],congress:[],confluence:[]};
+
+function saveUWKey(){
+  const val=document.getElementById('uw-key-input').value.trim();
+  if(!val){alert('Enter your Unusual Whales API key.');return;}
+  uwKey=val;
+  localStorage.setItem('fd_uw_key',val);
+  document.getElementById('uw-api-prompt').style.display='none';
+  showFlowStatus('API key saved. Ready to scan.');
+}
+
+function checkUWKey(){
+  if(uwKey){
+    document.getElementById('uw-api-prompt').style.display='none';
+  } else {
+    document.getElementById('uw-key-input').value='';
+  }
+}
+
+function showFlowStatus(msg){
+  document.getElementById('flow-last-scan').textContent=msg;
+}
+
+function clearFlowData(){
+  flowData={darkPool:[],options:[],congress:[],confluence:[]};
+  renderFlowPanels();
+  document.getElementById('confluence-feed').innerHTML=`<div class="flow-empty" style="padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;"><div class="flow-empty-icon">⬡</div>Run a scan to generate confluence signals and Kalshi contract suggestions.</div>`;
+  updateFlowMetrics(0,0,0,0);
+  document.getElementById('flow-live-label').style.display='none';
+  document.getElementById('flow-clear-btn').style.display='none';
+  showFlowStatus('');
+}
+
+function updateFlowMetrics(dp,opt,cong,conf){
+  document.getElementById('fl-dp-count').textContent=dp||'—';
+  document.getElementById('fl-opt-count').textContent=opt||'—';
+  document.getElementById('fl-cong-count').textContent=cong||'—';
+  document.getElementById('fl-conf-count').textContent=conf||'—';
+}
+
+function sizeClass(amt){
+  const n=parseFloat(amt);
+  if(n>=20)return'large';
+  if(n>=10)return'medium';
+  return'small';
+}
+
+function renderFlowPanels(){
+  // Dark pool
+  const dpPanel=document.getElementById('dp-panel');
+  if(!flowData.darkPool.length){
+    dpPanel.innerHTML='<div class="flow-empty"><div class="flow-empty-icon">◈</div>No prints yet.</div>';
+  } else {
+    dpPanel.innerHTML=flowData.darkPool.map(p=>{
+      const sc=sizeClass(p.size);
+      const isHigh=parseFloat(p.size)>=20;
+      const dirClass=p.direction==='bullish'?'dp-bull':p.direction==='bearish'?'dp-bear':'dp-neutral';
+      return`<div class="dp-card${isHigh?' high':''}">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <div class="dp-ticker${isHigh?' high':''}">${p.ticker}</div>
+          <div class="dp-size ${sc}">$${p.size}M</div>
+        </div>
+        <div class="dp-meta">
+          <span>${p.time||'today'}</span>
+          <span>${p.price?'@ $'+p.price:''}</span>
+          <span class="dp-badge ${dirClass}">${p.direction||'neutral'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Options
+  const optPanel=document.getElementById('opt-panel');
+  if(!flowData.options.length){
+    optPanel.innerHTML='<div class="flow-empty"><div class="flow-empty-icon">◈</div>No sweeps yet.</div>';
+  } else {
+    optPanel.innerHTML=flowData.options.map(o=>{
+      const typeClass=o.type==='call'?'opt-call':'opt-put';
+      return`<div class="opt-card${o.sweep?' sweep':''}">
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+          <div class="opt-ticker">${o.ticker}</div>
+          <span class="opt-type ${typeClass}">${o.type.toUpperCase()}</span>
+          ${o.sweep?`<span class="opt-sweep-badge">sweep</span>`:''}
+        </div>
+        <div class="opt-meta">$${o.premium}M premium · ${o.expiry||''} · ${o.strike?'$'+o.strike:''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Congress
+  const congPanel=document.getElementById('cong-panel');
+  if(!flowData.congress.length){
+    congPanel.innerHTML='<div class="flow-empty"><div class="flow-empty-icon">◈</div>No trades yet.</div>';
+  } else {
+    congPanel.innerHTML=flowData.congress.map(c=>{
+      return`<div class="cong-card">
+        <div class="cong-name">${c.name}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
+          <div class="cong-ticker">${c.ticker}</div>
+          <span style="font-size:10px;color:var(--muted);">${c.transaction||'Purchase'}</span>
+        </div>
+        <div class="cong-meta">${c.amount?`<span class="cong-amount">${c.amount}</span> · `:''} ${c.date||''}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function renderConfluence(confluenceItems){
+  const feed=document.getElementById('confluence-feed');
+  if(!confluenceItems||!confluenceItems.length){
+    feed.innerHTML='<div class="flow-empty" style="padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;"><div class="flow-empty-icon">⬡</div>No high-conviction signals detected in this scan.</div>';
+    return;
+  }
+  feed.innerHTML=confluenceItems.map(item=>{
+    const confClass=item.conviction==='high'?'conf-high':item.conviction==='medium'?'conf-med':'conf-low';
+    const signals=['darkPool','options','congress'];
+    const sigPills=signals.map(s=>{
+      const on=item.signals&&item.signals.includes(s);
+      const label=s==='darkPool'?'Dark Pool':s==='options'?'Options Flow':'Congress';
+      return`<span class="csig ${on?'csig-on':'csig-off'}">${on?'✓':''} ${label}</span>`;
+    }).join('');
+    const kalshiCards=(item.kalshi||[]).map(k=>`
+      <div class="kalshi-card${k.strength==='strong'?' strong':''}">
+        <div class="kalshi-contract">
+          <div class="kalshi-contract-name">${k.contract}</div>
+          <div class="kalshi-contract-meta">${k.category||''} · ${k.reasoning||''}</div>
+        </div>
+        ${k.odds?`<div class="kalshi-odds">${k.odds}¢</div>`:''}
+        ${k.edge?`<div class="kalshi-edge">${k.edge}</div>`:''}
+      </div>`).join('');
+    return`<div class="confluence-box">
+      <div class="confluence-head">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="confluence-title">${item.sector||item.ticker||'Signal'}</div>
+          <span class="confluence-badge ${confClass}">${item.conviction||'medium'} conviction</span>
+        </div>
+        ${item.ticker?`<span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text);">${item.ticker}</span>`:''}
+      </div>
+      <div class="confluence-signals">${sigPills}</div>
+      <div class="ai-interpretation">
+        <div class="ai-label">AI interpretation</div>
+        <div class="ai-text">${item.interpretation||''}</div>
+      </div>
+      ${kalshiCards?`<div class="small-label" style="margin-bottom:6px;">Kalshi contracts</div><div class="kalshi-suggestions">${kalshiCards}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+async function runFlowScan(){
+  const btn=document.getElementById('flow-scan-btn');
+  btn.disabled=true;btn.textContent='Scanning...';
+  showFlowStatus('Pulling data...');
+
+  // If no API key, use demo
+  if(!uwKey){
+    await runFlowDemo();
+    btn.disabled=false;btn.textContent='Scan now';
+    return;
+  }
+
+  try{
+    // Call the serverless function which will handle Unusual Whales + Claude
+    const res=await fetch('/api/flow-scan',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({uwKey,watchlist:tickers.map(t=>t.symbol)})
+    });
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+
+    flowData.darkPool=data.darkPool||[];
+    flowData.options=data.options||[];
+    flowData.congress=data.congress||[];
+
+    renderFlowPanels();
+    updateFlowMetrics(
+      flowData.darkPool.length,
+      flowData.options.length,
+      flowData.congress.length,
+      0
+    );
+
+    showFlowStatus('Data loaded. Running AI analysis...');
+
+    // Now run Claude confluence analysis
+    await runConfluenceAnalysis();
+
+    document.getElementById('flow-live-label').style.display='flex';
+    document.getElementById('flow-clear-btn').style.display='inline-flex';
+    showFlowStatus('Last scanned '+new Date().toLocaleTimeString());
+  }catch(err){
+    showFlowStatus('Error: '+err.message);
+  }
+  btn.disabled=false;btn.textContent='Scan now';
+}
+
+async function runConfluenceAnalysis(){
+  // Send all three data streams to Claude for confluence analysis
+  const prompt=`You are an institutional flow analyst. Analyze these three data streams and identify high-conviction trading signals.
+
+DARK POOL PRINTS (large block trades):
+${JSON.stringify(flowData.darkPool,null,2)}
+
+OPTIONS FLOW (unusual sweeps):
+${JSON.stringify(flowData.options,null,2)}
+
+CONGRESSIONAL TRADES:
+${JSON.stringify(flowData.congress,null,2)}
+
+Identify tickers or sectors where multiple streams converge. For each signal:
+1. Rate conviction: high / medium / low
+2. Explain what the confluence means in plain English
+3. Suggest 1-2 relevant Kalshi prediction market contracts that this signal relates to
+
+Return ONLY a JSON array, no markdown, no explanation outside the JSON:
+[
+  {
+    "ticker": "LMT",
+    "sector": "Defense",
+    "conviction": "high",
+    "signals": ["darkPool","options","congress"],
+    "interpretation": "Plain English explanation of what the confluence signals...",
+    "kalshi": [
+      {
+        "contract": "Will defense budget pass before Q3 2026?",
+        "category": "Politics / Defense",
+        "reasoning": "Why this contract is relevant",
+        "odds": "65",
+        "strength": "strong",
+        "edge": "underpriced"
+      }
+    ]
+  }
+]
+
+If no clear confluence exists, return an empty array [].`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data=await res.json();
+    const raw=data.content.map(b=>b.text||'').join('');
+    const clean=raw.replace(/```json|```/g,'').trim();
+    const parsed=JSON.parse(clean);
+    flowData.confluence=parsed;
+    renderConfluence(parsed);
+    updateFlowMetrics(
+      flowData.darkPool.length,
+      flowData.options.length,
+      flowData.congress.length,
+      parsed.filter(p=>p.conviction==='high').length
+    );
+  }catch(err){
+    console.error('Confluence analysis failed:',err);
+  }
+}
+
+async function runFlowDemo(){
+  const btn=document.getElementById('flow-scan-btn');
+  btn.disabled=true;btn.textContent='Loading demo...';
+  showFlowStatus('Loading demo data...');
+
+  // Simulated demo data — realistic looking
+  await new Promise(r=>setTimeout(r,800));
+
+  flowData.darkPool=[
+    {ticker:'LMT',size:'47.3',price:'472.80',direction:'bullish',time:'14:23'},
+    {ticker:'NVDA',size:'31.2',price:'118.40',direction:'bullish',time:'13:45'},
+    {ticker:'RTX',size:'18.9',price:'125.20',direction:'bullish',time:'13:12'},
+    {ticker:'XOM',size:'12.1',price:'112.30',direction:'neutral',time:'11:38'},
+    {ticker:'JPM',size:'8.4',price:'248.90',direction:'bearish',time:'10:55'},
+  ];
+
+  flowData.options=[
+    {ticker:'LMT',type:'call',premium:'2.1',expiry:'Jul 18',strike:'480',sweep:true},
+    {ticker:'RTX',type:'call',premium:'1.4',expiry:'Jun 20',strike:'130',sweep:true},
+    {ticker:'NVDA',type:'call',premium:'3.8',expiry:'Jun 20',strike:'125',sweep:false},
+    {ticker:'SPY',type:'put',premium:'4.2',expiry:'May 31',strike:'520',sweep:true},
+    {ticker:'XOM',type:'call',premium:'0.9',expiry:'Jul 18',strike:'115',sweep:false},
+  ];
+
+  flowData.congress=[
+    {name:'Sen. Dan Sullivan',ticker:'LMT',transaction:'Purchase',amount:'$250K–$500K',date:'May 9'},
+    {name:'Rep. Michael Waltz',ticker:'RTX',transaction:'Purchase',amount:'$100K–$250K',date:'May 7'},
+    {name:'Sen. Roger Wicker',ticker:'GD',transaction:'Purchase',amount:'$50K–$100K',date:'May 6'},
+    {name:'Rep. Tim Moore',ticker:'LGIH',transaction:'Purchase',amount:'$250K–$500K',date:'May 3'},
+  ];
+
+  renderFlowPanels();
+  updateFlowMetrics(
+    flowData.darkPool.length,
+    flowData.options.length,
+    flowData.congress.length,
+    0
+  );
+
+  showFlowStatus('Demo data loaded. Running AI analysis...');
+
+  // Run real Claude analysis on demo data
+  await runConfluenceAnalysis();
+
+  document.getElementById('flow-live-label').style.display='flex';
+  document.getElementById('flow-clear-btn').style.display='inline-flex';
+  showFlowStatus('Demo mode · '+new Date().toLocaleTimeString());
+  btn.disabled=false;btn.textContent='Scan now';
 }
 
 // ── INIT ──
 render();
 clearJForm();
 renderJournal();
+checkUWKey();
 </script>
 </body>
 </html>
