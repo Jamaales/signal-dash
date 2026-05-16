@@ -404,7 +404,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div class="tabs">
     <button class="tab active" id="tab-signals" onclick="switchTab('signals',this)">Signals</button>
     <button class="tab" id="tab-trump" onclick="switchTab('trump',this)">Trump tracker</button>
-    <button class="tab" id="tab-flow" onclick="switchTab('flow',this)">Flow</button>
+    <button class="tab" id="tab-flow" onclick="switchTab('flow',this)">Futures</button>
     <button class="tab" id="tab-journal" onclick="switchTab('journal',this)">Journal</button>
   </div>
   <div class="topbar-right" id="clock"></div>
@@ -475,102 +475,95 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
   <div id="trump-feed"><div class="empty">No announcements loaded yet.</div></div>
 </div>
 
-<!-- ── INSTITUTIONAL FLOW ── -->
+<!-- ── FUTURES INTELLIGENCE ── -->
 <div id="page-flow" class="page">
-
-  <!-- API Key Setup -->
-  <div class="api-prompt" id="uw-api-prompt">
-    <div class="api-prompt-title">⚡ Unusual Whales API Key Required</div>
-    <div class="api-prompt-desc">Enter your Unusual Whales API key to pull live dark pool prints, options flow, and congressional trades. Get your key at unusualwhales.com/developers ($48/mo). Key is stored locally — never sent anywhere except Unusual Whales.</div>
-    <div class="api-input-row">
-      <input type="password" id="uw-key-input" placeholder="uw_xxxxxxxxxxxxxxxxxxxxxxxx" />
-      <button class="flow-btn" onclick="saveUWKey()">Save key</button>
-      <button class="flow-btn secondary" onclick="runFlowDemo()">Demo mode</button>
-    </div>
-  </div>
 
   <!-- Metrics row -->
   <div class="flow-metrics">
     <div class="flow-metric cyan">
-      <div class="metric-label">Dark pool prints</div>
-      <div class="metric-value" id="fl-dp-count" style="color:var(--cyan)">—</div>
-      <div class="metric-sub">today, $5M+</div>
+      <div class="metric-label">NQ Bias</div>
+      <div class="metric-value" id="ft-nq-bias" style="color:var(--cyan)">—</div>
+      <div class="metric-sub">nasdaq futures</div>
     </div>
     <div class="flow-metric">
-      <div class="metric-label">Options sweeps</div>
-      <div class="metric-value" id="fl-opt-count">—</div>
-      <div class="metric-sub">unusual activity</div>
+      <div class="metric-label">ES Bias</div>
+      <div class="metric-value" id="ft-es-bias">—</div>
+      <div class="metric-sub">s&p futures</div>
     </div>
     <div class="flow-metric">
-      <div class="metric-label">Congress trades</div>
-      <div class="metric-value" id="fl-cong-count">—</div>
-      <div class="metric-sub">recent disclosures</div>
+      <div class="metric-label">VIX</div>
+      <div class="metric-value" id="ft-vix">—</div>
+      <div class="metric-sub">volatility index</div>
     </div>
     <div class="flow-metric">
-      <div class="metric-label">Confluence signals</div>
-      <div class="metric-value" id="fl-conf-count" style="color:var(--green)">—</div>
-      <div class="metric-sub">high conviction</div>
+      <div class="metric-label">Calendar risk</div>
+      <div class="metric-value" id="ft-cal-risk">—</div>
+      <div class="metric-sub">events today</div>
     </div>
   </div>
 
-  <!-- Scan controls -->
-  <div class="flow-scan-box">
+  <!-- Scan box -->
+  <div class="flow-scan-box" style="flex-direction:column;align-items:flex-start;">
     <div class="flow-scan-left">
-      <h3>Institutional Flow Intelligence</h3>
-      <p>Pulls dark pool prints, options sweeps, and congressional trades from Unusual Whales. Claude cross-references all three streams and surfaces high-conviction confluence signals with correlated Kalshi contracts.</p>
+      <h3>Futures Intelligence</h3>
+      <p>Morning scan — pulls NQ and ES price action, VIX, put/call ratio, and economic calendar. Claude analyzes the setup and surfaces your best entry zone for the day.</p>
     </div>
-    <div class="flow-scan-actions">
+    <div class="flow-scan-actions" style="width:100%;justify-content:flex-start;margin-top:10px;">
       <div class="live-label" id="flow-live-label" style="display:none;"><span class="live-dot"></span>live</div>
-      <button class="flow-btn secondary" id="flow-clear-btn" onclick="clearFlowData()" style="display:none;">Clear</button>
-      <button class="flow-btn" id="flow-scan-btn" onclick="runFlowScan()">Scan now</button>
+      <button class="flow-btn" id="flow-scan-btn" onclick="runFuturesScan()">Run morning scan</button>
       <div class="last-scan" id="flow-last-scan"></div>
     </div>
   </div>
 
-  <!-- Three panel grid -->
-  <div class="flow-grid">
-    <!-- Dark Pool Panel -->
+  <!-- Two column layout: levels + entry signal -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;" id="ft-main-grid">
+
+    <!-- Key levels panel -->
     <div class="flow-panel">
       <div class="flow-panel-head">
-        <div class="flow-panel-title"><span class="dot-dp"></span>Dark pool prints</div>
-        <span style="font-size:9px;color:var(--hint);font-family:'DM Mono',monospace;">$5M+ blocks</span>
+        <div class="flow-panel-title"><span class="dot-dp"></span>Key levels</div>
+        <div style="display:flex;gap:6px;">
+          <button class="filt-btn active" id="ft-nq-btn" onclick="switchFutures('NQ',this)" style="font-size:10px;padding:2px 8px;">NQ</button>
+          <button class="filt-btn" id="ft-es-btn" onclick="switchFutures('ES',this)" style="font-size:10px;padding:2px 8px;">ES</button>
+        </div>
       </div>
-      <div class="flow-panel-body" id="dp-panel">
-        <div class="flow-empty"><div class="flow-empty-icon">◈</div>No data yet.<br>Run a scan to pull live dark pool prints.</div>
+      <div class="flow-panel-body" id="ft-levels-panel" style="min-height:220px;">
+        <div class="flow-empty"><div class="flow-empty-icon">◈</div>Run a scan to load key levels.</div>
       </div>
     </div>
 
-    <!-- Options Flow Panel -->
+    <!-- Entry signal panel -->
     <div class="flow-panel">
       <div class="flow-panel-head">
-        <div class="flow-panel-title"><span class="dot-opt"></span>Options flow</div>
-        <span style="font-size:9px;color:var(--hint);font-family:'DM Mono',monospace;">unusual sweeps</span>
+        <div class="flow-panel-title"><span class="dot-opt"></span>Entry signal</div>
+        <span style="font-size:9px;color:var(--hint);font-family:'DM Mono',monospace;">9:45am rule</span>
       </div>
-      <div class="flow-panel-body" id="opt-panel">
-        <div class="flow-empty"><div class="flow-empty-icon">◈</div>No data yet.<br>Run a scan to pull options sweeps.</div>
+      <div class="flow-panel-body" id="ft-entry-panel" style="min-height:220px;">
+        <div class="flow-empty"><div class="flow-empty-icon">◈</div>Run a scan to generate entry signal.</div>
       </div>
     </div>
 
-    <!-- Congress Panel -->
-    <div class="flow-panel">
-      <div class="flow-panel-head">
-        <div class="flow-panel-title"><span class="dot-cong"></span>Congressional trades</div>
-        <span style="font-size:9px;color:var(--hint);font-family:'DM Mono',monospace;">recent disclosures</span>
-      </div>
-      <div class="flow-panel-body" id="cong-panel">
-        <div class="flow-empty"><div class="flow-empty-icon">◈</div>No data yet.<br>Run a scan to pull congressional trades.</div>
-      </div>
+  </div>
+
+  <!-- Calendar risk panel -->
+  <div class="flow-panel" style="margin-bottom:12px;">
+    <div class="flow-panel-head">
+      <div class="flow-panel-title"><span class="dot-cong"></span>Economic calendar</div>
+      <span style="font-size:9px;color:var(--hint);font-family:'DM Mono',monospace;">today's events</span>
+    </div>
+    <div class="flow-panel-body" id="ft-calendar-panel" style="flex-direction:row;flex-wrap:wrap;min-height:60px;gap:8px;">
+      <div class="flow-empty" style="width:100%;">Run a scan to load today's calendar.</div>
     </div>
   </div>
 
-  <!-- AI Confluence Analysis -->
-  <div class="section-head" style="margin-top:4px;">AI Confluence Analysis
+  <!-- AI Morning Brief -->
+  <div class="section-head">AI Morning Brief
     <span style="font-size:9px;color:var(--hint);">powered by Claude</span>
   </div>
-  <div id="confluence-feed">
+  <div id="ft-brief-feed">
     <div class="flow-empty" style="padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;">
       <div class="flow-empty-icon">⬡</div>
-      Run a scan to generate confluence signals and Kalshi contract suggestions.
+      Run your morning scan to get today's futures brief and entry signal.
     </div>
   </div>
 
@@ -882,245 +875,292 @@ async function addFromTrump(sym){
   await lookupTicker(sym,idx);
 }
 
-// ── INSTITUTIONAL FLOW ──
-let uwKey=localStorage.getItem('fd_uw_key')||'';
-let flowData={darkPool:[],options:[],congress:[],confluence:[]};
+// ── FUTURES INTELLIGENCE ──
+let futuresData={nq:{},es:{},vix:null,pcRatio:null,calendar:[],brief:''};
+let activeFutures='NQ';
 
-function saveUWKey(){
-  const val=document.getElementById('uw-key-input').value.trim();
-  if(!val){alert('Enter your Unusual Whales API key.');return;}
-  uwKey=val;
-  localStorage.setItem('fd_uw_key',val);
-  document.getElementById('uw-api-prompt').style.display='none';
-  showFlowStatus('API key saved. Ready to scan.');
-}
-
-function checkUWKey(){
-  if(uwKey){
-    document.getElementById('uw-api-prompt').style.display='none';
-  } else {
-    document.getElementById('uw-key-input').value='';
-  }
+function switchFutures(sym,el){
+  activeFutures=sym;
+  document.getElementById('ft-nq-btn').classList.toggle('active',sym==='NQ');
+  document.getElementById('ft-es-btn').classList.toggle('active',sym==='ES');
+  renderLevels();
 }
 
 function showFlowStatus(msg){
   document.getElementById('flow-last-scan').textContent=msg;
 }
 
-function clearFlowData(){
-  flowData={darkPool:[],options:[],congress:[],confluence:[]};
-  renderFlowPanels();
-  document.getElementById('confluence-feed').innerHTML=`<div class="flow-empty" style="padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;"><div class="flow-empty-icon">⬡</div>Run a scan to generate confluence signals and Kalshi contract suggestions.</div>`;
-  updateFlowMetrics(0,0,0,0);
-  document.getElementById('flow-live-label').style.display='none';
-  document.getElementById('flow-clear-btn').style.display='none';
-  showFlowStatus('');
+function updateFuturesMetrics(nqBias,esBias,vix,calRisk){
+  const nqEl=document.getElementById('ft-nq-bias');
+  const esEl=document.getElementById('ft-es-bias');
+  const vixEl=document.getElementById('ft-vix');
+  const calEl=document.getElementById('ft-cal-risk');
+
+  nqEl.textContent=nqBias||'—';
+  nqEl.style.color=nqBias==='Bull'?'var(--green)':nqBias==='Bear'?'var(--red)':'var(--amber)';
+  esEl.textContent=esBias||'—';
+  esEl.style.color=esBias==='Bull'?'var(--green)':esBias==='Bear'?'var(--red)':'var(--amber)';
+  vixEl.textContent=vix?parseFloat(vix).toFixed(1):'—';
+  vixEl.style.color=parseFloat(vix)>20?'var(--red)':parseFloat(vix)>15?'var(--amber)':'var(--green)';
+  calEl.textContent=calRisk||'—';
+  calEl.style.color=calRisk==='High'?'var(--red)':calRisk==='Med'?'var(--amber)':'var(--green)';
 }
 
-function updateFlowMetrics(dp,opt,cong,conf){
-  document.getElementById('fl-dp-count').textContent=dp||'—';
-  document.getElementById('fl-opt-count').textContent=opt||'—';
-  document.getElementById('fl-cong-count').textContent=cong||'—';
-  document.getElementById('fl-conf-count').textContent=conf||'—';
-}
-
-function sizeClass(amt){
-  const n=parseFloat(amt);
-  if(n>=20)return'large';
-  if(n>=10)return'medium';
-  return'small';
-}
-
-function renderFlowPanels(){
-  // Dark pool
-  const dpPanel=document.getElementById('dp-panel');
-  if(!flowData.darkPool.length){
-    dpPanel.innerHTML='<div class="flow-empty"><div class="flow-empty-icon">◈</div>No prints yet.</div>';
-  } else {
-    dpPanel.innerHTML=flowData.darkPool.map(p=>{
-      const sc=sizeClass(p.size);
-      const isHigh=parseFloat(p.size)>=20;
-      const dirClass=p.direction==='bullish'?'dp-bull':p.direction==='bearish'?'dp-bear':'dp-neutral';
-      return`<div class="dp-card${isHigh?' high':''}">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
-          <div class="dp-ticker${isHigh?' high':''}">${p.ticker}</div>
-          <div class="dp-size ${sc}">$${p.size}M</div>
-        </div>
-        <div class="dp-meta">
-          <span>${p.time||'today'}</span>
-          <span>${p.price?'@ $'+p.price:''}</span>
-          <span class="dp-badge ${dirClass}">${p.direction||'neutral'}</span>
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  // Options
-  const optPanel=document.getElementById('opt-panel');
-  if(!flowData.options.length){
-    optPanel.innerHTML='<div class="flow-empty"><div class="flow-empty-icon">◈</div>No sweeps yet.</div>';
-  } else {
-    optPanel.innerHTML=flowData.options.map(o=>{
-      const typeClass=o.type==='call'?'opt-call':'opt-put';
-      return`<div class="opt-card${o.sweep?' sweep':''}">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
-          <div class="opt-ticker">${o.ticker}</div>
-          <span class="opt-type ${typeClass}">${o.type.toUpperCase()}</span>
-          ${o.sweep?`<span class="opt-sweep-badge">sweep</span>`:''}
-        </div>
-        <div class="opt-meta">$${o.premium}M premium · ${o.expiry||''} · ${o.strike?'$'+o.strike:''}
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  // Congress
-  const congPanel=document.getElementById('cong-panel');
-  if(!flowData.congress.length){
-    congPanel.innerHTML='<div class="flow-empty"><div class="flow-empty-icon">◈</div>No trades yet.</div>';
-  } else {
-    congPanel.innerHTML=flowData.congress.map(c=>{
-      return`<div class="cong-card">
-        <div class="cong-name">${c.name}</div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
-          <div class="cong-ticker">${c.ticker}</div>
-          <span style="font-size:10px;color:var(--muted);">${c.transaction||'Purchase'}</span>
-        </div>
-        <div class="cong-meta">${c.amount?`<span class="cong-amount">${c.amount}</span> · `:''} ${c.date||''}</div>
-      </div>`;
-    }).join('');
-  }
-}
-
-function renderConfluence(confluenceItems){
-  const feed=document.getElementById('confluence-feed');
-  if(!confluenceItems||!confluenceItems.length){
-    feed.innerHTML='<div class="flow-empty" style="padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;"><div class="flow-empty-icon">⬡</div>No high-conviction signals detected in this scan.</div>';
+function renderLevels(){
+  const panel=document.getElementById('ft-levels-panel');
+  const d=activeFutures==='NQ'?futuresData.nq:futuresData.es;
+  if(!d||!d.price){
+    panel.innerHTML='<div class="flow-empty"><div class="flow-empty-icon">◈</div>Run a scan to load key levels.</div>';
     return;
   }
-  feed.innerHTML=confluenceItems.map(item=>{
-    const confClass=item.conviction==='high'?'conf-high':item.conviction==='medium'?'conf-med':'conf-low';
-    const signals=['darkPool','options','congress'];
-    const sigPills=signals.map(s=>{
-      const on=item.signals&&item.signals.includes(s);
-      const label=s==='darkPool'?'Dark Pool':s==='options'?'Options Flow':'Congress';
-      return`<span class="csig ${on?'csig-on':'csig-off'}">${on?'✓':''} ${label}</span>`;
-    }).join('');
-    const kalshiCards=(item.kalshi||[]).map(k=>`
-      <div class="kalshi-card${k.strength==='strong'?' strong':''}">
-        <div class="kalshi-contract">
-          <div class="kalshi-contract-name">${k.contract}</div>
-          <div class="kalshi-contract-meta">${k.category||''} · ${k.reasoning||''}</div>
-        </div>
-        ${k.odds?`<div class="kalshi-odds">${k.odds}¢</div>`:''}
-        ${k.edge?`<div class="kalshi-edge">${k.edge}</div>`:''}
-      </div>`).join('');
-    return`<div class="confluence-box">
-      <div class="confluence-head">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="confluence-title">${item.sector||item.ticker||'Signal'}</div>
-          <span class="confluence-badge ${confClass}">${item.conviction||'medium'} conviction</span>
-        </div>
-        ${item.ticker?`<span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text);">${item.ticker}</span>`:''}
+  const levels=[
+    {label:'R2',val:d.r2,cls:'var(--red)'},
+    {label:'R1',val:d.r1,cls:'var(--amber)'},
+    {label:'VWAP',val:d.vwap,cls:'var(--cyan)'},
+    {label:'Price',val:d.price,cls:'var(--text)',bold:true},
+    {label:'S1',val:d.s1,cls:'var(--amber)'},
+    {label:'S2',val:d.s2,cls:'var(--red)'},
+    {label:'Prev close',val:d.prevClose,cls:'var(--muted)'},
+    {label:'Gap',val:d.gap,cls:parseFloat(d.gap)>0?'var(--green)':'var(--red)'},
+  ];
+  panel.innerHTML=levels.map(l=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;background:var(--surface2);border-radius:6px;border:1px solid var(--border);">
+      <span style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">${l.label}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:13px;font-weight:${l.bold?'600':'400'};color:${l.cls};">${l.val||'—'}</span>
+    </div>`).join('');
+}
+
+function renderEntrySignal(signal){
+  const panel=document.getElementById('ft-entry-panel');
+  if(!signal){
+    panel.innerHTML='<div class="flow-empty"><div class="flow-empty-icon">◈</div>No entry signal generated.</div>';
+    return;
+  }
+  const dirColor=signal.direction==='Long'?'var(--green)':signal.direction==='Short'?'var(--red)':'var(--amber)';
+  const confColor=signal.confidence==='High'?'conf-high':signal.confidence==='Medium'?'conf-med':'conf-low';
+  panel.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <span style="font-family:'DM Mono',monospace;font-size:18px;font-weight:600;color:${dirColor};">${signal.direction==='Wait'?'⏸ WAIT':signal.direction==='Long'?'↑ LONG':'↓ SHORT'}</span>
+      <span class="confluence-badge ${confColor}">${signal.confidence||'—'} confidence</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      ${signal.instrument?`<div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--surface2);border-radius:5px;border:1px solid var(--border);"><span style="font-size:10px;color:var(--muted);">Instrument</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--cyan);">${signal.instrument}</span></div>`:''}
+      ${signal.entryZone?`<div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--surface2);border-radius:5px;border:1px solid var(--border);"><span style="font-size:10px;color:var(--muted);">Entry zone</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text);">${signal.entryZone}</span></div>`:''}
+      ${signal.stopLoss?`<div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--surface2);border-radius:5px;border:1px solid var(--red-border);"><span style="font-size:10px;color:var(--muted);">Stop loss</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--red);">${signal.stopLoss}</span></div>`:''}
+      ${signal.target?`<div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--surface2);border-radius:5px;border:1px solid var(--green-border);"><span style="font-size:10px;color:var(--muted);">Target</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);">${signal.target}</span></div>`:''}
+      ${signal.rr?`<div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--surface2);border-radius:5px;border:1px solid var(--border);"><span style="font-size:10px;color:var(--muted);">Risk:Reward</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--cyan);">${signal.rr}</span></div>`:''}
+      <div style="font-size:10px;color:var(--hint);padding:6px 0;font-style:italic;">⏰ Wait for 9:45am CT before entry</div>
+    </div>`;
+}
+
+function renderCalendar(events){
+  const panel=document.getElementById('ft-calendar-panel');
+  if(!events||!events.length){
+    panel.innerHTML='<div class="flow-empty" style="width:100%;">No major events today.</div>';
+    return;
+  }
+  panel.innerHTML=events.map(e=>{
+    const impColor=e.impact==='High'?'imp-high':e.impact==='Medium'?'imp-med':'imp-low';
+    return`<div style="display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:7px 10px;flex:1;min-width:180px;">
+      <span class="imp ${impColor}" style="white-space:nowrap;">${e.impact}</span>
+      <div>
+        <div style="font-size:11px;font-weight:500;">${e.name}</div>
+        <div style="font-size:10px;color:var(--hint);font-family:'DM Mono',monospace;">${e.time||''}</div>
       </div>
-      <div class="confluence-signals">${sigPills}</div>
-      <div class="ai-interpretation">
-        <div class="ai-label">AI interpretation</div>
-        <div class="ai-text">${item.interpretation||''}</div>
-      </div>
-      ${kalshiCards?`<div class="small-label" style="margin-bottom:6px;">Kalshi contracts</div><div class="kalshi-suggestions">${kalshiCards}</div>`:''}
     </div>`;
   }).join('');
 }
 
-async function runFlowScan(){
-  const btn=document.getElementById('flow-scan-btn');
-  btn.disabled=true;btn.textContent='Scanning...';
-  showFlowStatus('Pulling data...');
-
-  // If no API key, use demo
-  if(!uwKey){
-    await runFlowDemo();
-    btn.disabled=false;btn.textContent='Scan now';
+function renderBrief(brief){
+  const feed=document.getElementById('ft-brief-feed');
+  if(!brief){
+    feed.innerHTML='<div class="flow-empty" style="padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:10px;"><div class="flow-empty-icon">⬡</div>No brief generated.</div>';
     return;
   }
+  feed.innerHTML=`
+    <div class="confluence-box" style="border-color:var(--cyan-border);box-shadow:0 0 20px rgba(34,211,238,.06);">
+      <div class="confluence-head">
+        <div class="confluence-title">Morning Brief — ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'})}</div>
+        <div class="live-label" style="display:flex;"><span class="live-dot"></span>claude</div>
+      </div>
+      <div class="ai-interpretation">
+        <div class="ai-label">AI analysis</div>
+        <div class="ai-text" style="line-height:1.8;">${brief}</div>
+      </div>
+    </div>`;
+}
+
+async function runFuturesScan(){
+  const btn=document.getElementById('flow-scan-btn');
+  btn.disabled=true;btn.textContent='Scanning...';
+  showFlowStatus('Pulling market data...');
 
   try{
-    // Call the serverless function which will handle Unusual Whales + Claude
-    const res=await fetch('/api/flow-scan',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({uwKey,watchlist:tickers.map(t=>t.symbol)})
-    });
-    const data=await res.json();
-    if(data.error)throw new Error(data.error);
+    // Pull NQ, ES, VIX from Yahoo Finance via a free proxy
+    const [nqData,esData,vixData]=await Promise.all([
+      fetchYahooQuote('NQ=F'),
+      fetchYahooQuote('ES=F'),
+      fetchYahooQuote('^VIX'),
+    ]);
 
-    flowData.darkPool=data.darkPool||[];
-    flowData.options=data.options||[];
-    flowData.congress=data.congress||[];
+    // Pull economic calendar from FMP (free)
+    const calData=await fetchEconomicCalendar();
 
-    renderFlowPanels();
-    updateFlowMetrics(
-      flowData.darkPool.length,
-      flowData.options.length,
-      flowData.congress.length,
-      0
-    );
+    // Build structured data
+    futuresData.nq=buildLevels(nqData);
+    futuresData.es=buildLevels(esData);
+    futuresData.vix=vixData?.price||null;
+    futuresData.calendar=calData;
+
+    // Update metrics
+    const nqBias=getBias(futuresData.nq);
+    const esBias=getBias(futuresData.es);
+    const calRisk=getCalRisk(calData);
+    updateFuturesMetrics(nqBias,esBias,futuresData.vix,calRisk);
+
+    renderLevels();
+    renderCalendar(calData);
 
     showFlowStatus('Data loaded. Running AI analysis...');
 
-    // Now run Claude confluence analysis
-    await runConfluenceAnalysis();
+    // Run Claude morning brief
+    await runMorningBrief(nqBias,esBias,calRisk);
 
     document.getElementById('flow-live-label').style.display='flex';
-    document.getElementById('flow-clear-btn').style.display='inline-flex';
     showFlowStatus('Last scanned '+new Date().toLocaleTimeString());
   }catch(err){
     showFlowStatus('Error: '+err.message);
+    console.error('Futures scan error:',err);
   }
-  btn.disabled=false;btn.textContent='Scan now';
+  btn.disabled=false;btn.textContent='Run morning scan';
 }
 
-async function runConfluenceAnalysis(){
-  // Send all three data streams to Claude for confluence analysis
-  const prompt=`You are an institutional flow analyst. Analyze these three data streams and identify high-conviction trading signals.
+async function fetchYahooQuote(symbol){
+  try{
+    const res=await fetch(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`);
+    const data=await res.json();
+    const result=data?.chart?.result?.[0];
+    if(!result)return null;
+    const meta=result.meta;
+    return{
+      price:meta.regularMarketPrice,
+      prevClose:meta.chartPreviousClose||meta.previousClose,
+      high:meta.regularMarketDayHigh,
+      low:meta.regularMarketDayLow,
+      open:meta.regularMarketOpen,
+    };
+  }catch{return null;}
+}
 
-DARK POOL PRINTS (large block trades):
-${JSON.stringify(flowData.darkPool,null,2)}
+function buildLevels(q){
+  if(!q)return{};
+  const p=parseFloat(q.price);
+  const pc=parseFloat(q.prevClose);
+  const hi=parseFloat(q.high)||p;
+  const lo=parseFloat(q.low)||p;
+  const gap=((p-pc)/pc*100).toFixed(2)+'%';
+  // Pivot point levels
+  const pivot=(hi+lo+pc)/3;
+  const r1=(2*pivot-lo);
+  const r2=(pivot+(hi-lo));
+  const s1=(2*pivot-hi);
+  const s2=(pivot-(hi-lo));
+  // VWAP approximation (intraday midpoint as proxy)
+  const vwap=((hi+lo+p)/3).toFixed(2);
+  return{
+    price:p.toFixed(2),
+    prevClose:pc.toFixed(2),
+    gap,
+    vwap,
+    r1:r1.toFixed(2),
+    r2:r2.toFixed(2),
+    s1:s1.toFixed(2),
+    s2:s2.toFixed(2),
+    open:parseFloat(q.open).toFixed(2),
+    high:hi.toFixed(2),
+    low:lo.toFixed(2),
+  };
+}
 
-OPTIONS FLOW (unusual sweeps):
-${JSON.stringify(flowData.options,null,2)}
+function getBias(d){
+  if(!d||!d.price)return null;
+  const p=parseFloat(d.price);
+  const pc=parseFloat(d.prevClose);
+  const vwap=parseFloat(d.vwap);
+  if(p>vwap&&p>pc)return'Bull';
+  if(p<vwap&&p<pc)return'Bear';
+  return'Neutral';
+}
 
-CONGRESSIONAL TRADES:
-${JSON.stringify(flowData.congress,null,2)}
+async function fetchEconomicCalendar(){
+  try{
+    const today=new Date().toISOString().split('T')[0];
+    const key=process?.env?.FMP_API_KEY||localStorage.getItem('fd_fmp_key')||'';
+    if(!key)return getDemoCalendar();
+    const res=await fetch(`https://financialmodelingprep.com/api/v3/economic_calendar?from=${today}&to=${today}&apikey=${key}`);
+    const data=await res.json();
+    if(!Array.isArray(data)||!data.length)return getDemoCalendar();
+    return data.slice(0,6).map(e=>({
+      name:e.event||e.name,
+      time:e.date?new Date(e.date).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}):'',
+      impact:e.impact==='High'?'High':e.impact==='Medium'?'Medium':'Low',
+    }));
+  }catch{return getDemoCalendar();}
+}
 
-Identify tickers or sectors where multiple streams converge. For each signal:
-1. Rate conviction: high / medium / low
-2. Explain what the confluence means in plain English
-3. Suggest 1-2 relevant Kalshi prediction market contracts that this signal relates to
+function getDemoCalendar(){
+  return[
+    {name:'Initial Jobless Claims',time:'8:30 AM',impact:'High'},
+    {name:'Fed Speaker — Williams',time:'11:00 AM',impact:'Medium'},
+    {name:'30-Yr Bond Auction',time:'1:00 PM',impact:'Medium'},
+  ];
+}
 
-Return ONLY a JSON array, no markdown, no explanation outside the JSON:
-[
-  {
-    "ticker": "LMT",
-    "sector": "Defense",
-    "conviction": "high",
-    "signals": ["darkPool","options","congress"],
-    "interpretation": "Plain English explanation of what the confluence signals...",
-    "kalshi": [
-      {
-        "contract": "Will defense budget pass before Q3 2026?",
-        "category": "Politics / Defense",
-        "reasoning": "Why this contract is relevant",
-        "odds": "65",
-        "strength": "strong",
-        "edge": "underpriced"
-      }
-    ]
+function getCalRisk(events){
+  if(!events||!events.length)return'Low';
+  if(events.some(e=>e.impact==='High'))return'High';
+  if(events.some(e=>e.impact==='Medium'))return'Med';
+  return'Low';
+}
+
+async function runMorningBrief(nqBias,esBias,calRisk){
+  const nq=futuresData.nq;
+  const es=futuresData.es;
+  const vix=futuresData.vix;
+  const cal=futuresData.calendar;
+
+  const prompt=`You are a professional futures trader and morning analyst. Generate a concise morning brief and specific entry signal for today.
+
+MARKET DATA:
+NQ (Nasdaq Futures): Price ${nq.price}, Prev Close ${nq.prevClose}, Gap ${nq.gap}, VWAP ${nq.vwap}, R1 ${nq.r1}, S1 ${nq.s1}, High ${nq.high}, Low ${nq.low}
+ES (S&P Futures): Price ${es.price}, Prev Close ${es.prevClose}, Gap ${es.gap}, VWAP ${es.vwap}, R1 ${es.r1}, S1 ${es.s1}
+VIX: ${vix}
+NQ Bias: ${nqBias}
+ES Bias: ${esBias}
+Calendar Risk: ${calRisk}
+Economic Events Today: ${cal.map(e=>`${e.name} at ${e.time} (${e.impact} impact)`).join(', ')||'None'}
+
+TRADER RULES:
+- No entries before 9:45am CT
+- Only trade with confluence of bias + VWAP confirmation
+- Prefer NQ for volatility, ES for stability
+- Respect high-impact calendar events — stay out 30min before/after
+
+Return ONLY a JSON object, no markdown:
+{
+  "brief": "2-3 paragraph plain English analysis of today's setup. What the gap means, what VIX is signaling, what the calendar risk is, and what to watch for. Be specific with price levels.",
+  "signal": {
+    "direction": "Long|Short|Wait",
+    "confidence": "High|Medium|Low",
+    "instrument": "NQ|ES",
+    "entryZone": "price range e.g. 19,760–19,780",
+    "stopLoss": "specific price",
+    "target": "specific price",
+    "rr": "e.g. 2.4:1"
   }
-]
+}
 
-If no clear confluence exists, return an empty array [].`;
+If calendar risk is High or bias is unclear, set direction to Wait.`;
 
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
@@ -1128,7 +1168,7 @@ If no clear confluence exists, return an empty array [].`;
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
+        max_tokens:1500,
         messages:[{role:'user',content:prompt}]
       })
     });
@@ -1136,74 +1176,18 @@ If no clear confluence exists, return an empty array [].`;
     const raw=data.content.map(b=>b.text||'').join('');
     const clean=raw.replace(/```json|```/g,'').trim();
     const parsed=JSON.parse(clean);
-    flowData.confluence=parsed;
-    renderConfluence(parsed);
-    updateFlowMetrics(
-      flowData.darkPool.length,
-      flowData.options.length,
-      flowData.congress.length,
-      parsed.filter(p=>p.conviction==='high').length
-    );
+    renderBrief(parsed.brief);
+    renderEntrySignal(parsed.signal);
   }catch(err){
-    console.error('Confluence analysis failed:',err);
+    console.error('Morning brief failed:',err);
+    renderBrief('Analysis unavailable. Check your connection and try again.');
   }
-}
-
-async function runFlowDemo(){
-  const btn=document.getElementById('flow-scan-btn');
-  btn.disabled=true;btn.textContent='Loading demo...';
-  showFlowStatus('Loading demo data...');
-
-  // Simulated demo data — realistic looking
-  await new Promise(r=>setTimeout(r,800));
-
-  flowData.darkPool=[
-    {ticker:'LMT',size:'47.3',price:'472.80',direction:'bullish',time:'14:23'},
-    {ticker:'NVDA',size:'31.2',price:'118.40',direction:'bullish',time:'13:45'},
-    {ticker:'RTX',size:'18.9',price:'125.20',direction:'bullish',time:'13:12'},
-    {ticker:'XOM',size:'12.1',price:'112.30',direction:'neutral',time:'11:38'},
-    {ticker:'JPM',size:'8.4',price:'248.90',direction:'bearish',time:'10:55'},
-  ];
-
-  flowData.options=[
-    {ticker:'LMT',type:'call',premium:'2.1',expiry:'Jul 18',strike:'480',sweep:true},
-    {ticker:'RTX',type:'call',premium:'1.4',expiry:'Jun 20',strike:'130',sweep:true},
-    {ticker:'NVDA',type:'call',premium:'3.8',expiry:'Jun 20',strike:'125',sweep:false},
-    {ticker:'SPY',type:'put',premium:'4.2',expiry:'May 31',strike:'520',sweep:true},
-    {ticker:'XOM',type:'call',premium:'0.9',expiry:'Jul 18',strike:'115',sweep:false},
-  ];
-
-  flowData.congress=[
-    {name:'Sen. Dan Sullivan',ticker:'LMT',transaction:'Purchase',amount:'$250K–$500K',date:'May 9'},
-    {name:'Rep. Michael Waltz',ticker:'RTX',transaction:'Purchase',amount:'$100K–$250K',date:'May 7'},
-    {name:'Sen. Roger Wicker',ticker:'GD',transaction:'Purchase',amount:'$50K–$100K',date:'May 6'},
-    {name:'Rep. Tim Moore',ticker:'LGIH',transaction:'Purchase',amount:'$250K–$500K',date:'May 3'},
-  ];
-
-  renderFlowPanels();
-  updateFlowMetrics(
-    flowData.darkPool.length,
-    flowData.options.length,
-    flowData.congress.length,
-    0
-  );
-
-  showFlowStatus('Demo data loaded. Running AI analysis...');
-
-  // Run real Claude analysis on demo data
-  await runConfluenceAnalysis();
-
-  document.getElementById('flow-live-label').style.display='flex';
-  document.getElementById('flow-clear-btn').style.display='inline-flex';
-  showFlowStatus('Demo mode · '+new Date().toLocaleTimeString());
-  btn.disabled=false;btn.textContent='Scan now';
 }
 
 // ── INIT ──
 render();
 clearJForm();
 renderJournal();
-checkUWKey();
 </script>
 </body>
 </html>
